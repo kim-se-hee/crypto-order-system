@@ -20,4 +20,8 @@ public class MemberCoin {
 
     @ManyToOne(fetch = FetchType.LAZY)
     Coin coin;
+
+    public boolean isLessThan(Integer amount){
+        return this.koreanWonValue < amount;
+    }
 }
