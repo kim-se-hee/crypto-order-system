@@ -7,12 +7,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 public class OrderForm {
 
     @NotNull
-    private Long userId;
+    private Long memberId;
 
     @NotNull
     private Long coinId;
@@ -27,6 +29,6 @@ public class OrderForm {
     @NotNull
     private OrderType orderType;
 
-    private Integer limitPrice;
+    private BigDecimal limitPrice;
 
 }
