@@ -1,8 +1,10 @@
 package ksh.example.mybit.domain;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
@@ -24,6 +26,9 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Coin coin;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     public Order(Integer amount, OrderSide orderSide, OrderType orderType, BigDecimal limitPrice, Member member, Coin coin){
         this.amount =  amount;
