@@ -14,4 +14,14 @@ public class Member {
     private String password;
 
     private String name;
+
+    public Member(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+    }
+
+    public Member() {}
+
+    public Long getId() {return id;}
 }
