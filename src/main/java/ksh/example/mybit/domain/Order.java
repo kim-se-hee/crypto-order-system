@@ -1,6 +1,7 @@
 package ksh.example.mybit.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
+@Getter
 public class Order {
     @Id
     @Column(name = "order_id")
@@ -41,5 +43,21 @@ public class Order {
 
     public Order() {
 
+    }
+
+    public void updateAmount(Integer volume){
+        this.amount = this.amount - volume;
+    }
+
+    public boolean isLimitOrder() {
+        return this.orderType == OrderType.LIMIT;
+    }
+
+    public boolean isFinished(){
+        return this.amount == 0;
+    }
+
+    public void finish() {
+        this.status = "finished";
     }
 }

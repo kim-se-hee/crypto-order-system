@@ -1,6 +1,5 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.controller.form.OrderForm;
 import ksh.example.mybit.domain.*;
 import ksh.example.mybit.repository.CoinRepository;
 import ksh.example.mybit.repository.MemberCoinRepository;
@@ -19,43 +18,35 @@ public class OrderService {
     private final CoinRepository coinRepository;
     private final MemberCoinRepository memberCoinRepository;
 
-    public Order addOrder(OrderForm orderForm){
-        Long memberId = orderForm.getMemberId();
-        Member member = checkMemberIsValid(memberId);
+    public Order addOrder(Order order){
+        Member member = order.getMember();
+        checkMemberIsValid(member);
 
-        Long coinId = orderForm.getCoinId();
-        Coin coin = checkMarketSupports(coinId);
+        Coin coin = order.getCoin();
+        checkMarketSupports(coin);
 
-        checkWallet(orderForm, member, coin);
-
-        Order order = new Order(
-                orderForm.getOrderAmount(),
-                orderForm.getOrderSide(),
-                orderForm.getOrderType(),
-                orderForm.getLimitPrice(),
-                member,
-                coin);
+        checkWallet(order, member, coin);
         orderRepository.save(order);
         return order;
     }
 
-    private Member checkMemberIsValid(Long memberId) {
+    private void checkMemberIsValid(Member member) {
+        Long memberId = member.getId();
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         if(optionalMember.isEmpty())
             throw new IllegalArgumentException("존재하지 않는 회원입니다.");
-        return optionalMember.get();
     }
 
-    private Coin checkMarketSupports(Long coinId) {
+    private void checkMarketSupports(Coin coin) {
+        Long coinId = coin.getId();
         Optional<Coin> optionalCoin = coinRepository.findById(coinId);
         if(optionalCoin.isEmpty())
             throw new IllegalArgumentException("존재하지 않는 코인입니다.");
-        return optionalCoin.get();
     }
 
-    private void checkWallet(OrderForm orderForm, Member member, Coin coin) {
-        OrderSide orderSide = orderForm.getOrderSide();
-        Integer orderAmount = orderForm.getOrderAmount();
+    private void checkWallet(Order order, Member member, Coin coin) {
+        OrderSide orderSide = order.getOrderSide();
+        Integer orderAmount = order.getAmount();
 
         if(orderSide == OrderSide.SELL){
             checkCoinInWallet(orderAmount, member, coin);

@@ -22,4 +22,9 @@ public class MemberService {
 
         return member;
     }
+
+    public Member findMember(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 회원입니다."));
+    }
 }
