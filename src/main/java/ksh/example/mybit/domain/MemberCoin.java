@@ -24,4 +24,14 @@ public class MemberCoin {
     public boolean isLessThan(Integer amount){
         return this.koreanWonValue < amount;
     }
+
+    public MemberCoin(BigDecimal balance, Long koreanWonValue, Member member, Coin coin) {
+        this.balance = balance;
+        this.koreanWonValue = koreanWonValue;
+        this.member = member;
+        this.coin = coin;
+    }
+
+    public MemberCoin() {
+    }
 }

@@ -21,7 +21,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderType orderType;
     private BigDecimal limitPrice;
-    private String status;
+    private OrderStatus orderStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -39,6 +39,7 @@ public class Order {
         this.limitPrice = limitPrice;
         this.member = member;
         this.coin = coin;
+        this.orderStatus = OrderStatus.PENDING;
     }
 
     public Order() {
@@ -49,15 +50,11 @@ public class Order {
         this.amount = this.amount - volume;
     }
 
-    public boolean isLimitOrder() {
-        return this.orderType == OrderType.LIMIT;
-    }
-
     public boolean isFinished(){
         return this.amount == 0;
     }
 
     public void finish() {
-        this.status = "finished";
+        this.orderStatus = OrderStatus.FINISHED;
     }
 }

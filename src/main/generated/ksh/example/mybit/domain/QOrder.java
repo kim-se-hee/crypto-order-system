@@ -36,9 +36,9 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final EnumPath<OrderSide> orderSide = createEnum("orderSide", OrderSide.class);
 
-    public final EnumPath<OrderType> orderType = createEnum("orderType", OrderType.class);
+    public final EnumPath<OrderStatus> orderStatus = createEnum("orderStatus", OrderStatus.class);
 
-    public final StringPath status = createString("status");
+    public final EnumPath<OrderType> orderType = createEnum("orderType", OrderType.class);
 
     public QOrder(String variable) {
         this(Order.class, forVariable(variable), INITS);
