@@ -2,10 +2,13 @@ package ksh.example.mybit.controller;
 
 import ksh.example.mybit.domain.OrderSide;
 import ksh.example.mybit.domain.OrderType;
+import ksh.example.mybit.service.CoinService;
+import ksh.example.mybit.service.MemberService;
 import ksh.example.mybit.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +31,10 @@ class OrderControllerTest {
 
     @MockBean
     private OrderService orderService;
+    @MockBean
+    private MemberService memberService;
+    @MockBean
+    private CoinService coinService;
 
     @Test
     public void 정상_url() throws Exception {
