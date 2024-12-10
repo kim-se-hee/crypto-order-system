@@ -1,5 +1,6 @@
 package ksh.example.mybit.repository;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -9,9 +10,8 @@ import ksh.example.mybit.domain.OrderStatus;
 import ksh.example.mybit.domain.OrderType;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-import static ksh.example.mybit.domain.QOrder.*;
+import static ksh.example.mybit.domain.QOrder.order;
 
 public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
@@ -22,34 +22,37 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public List<Order> findMatchingOrders(Long coinId, OrderSide orderSide, OrderType orderType, BigDecimal limitPrice) {
+    public Order findMatchingOrder(Order o) {
         return queryFactory
                 .select(order)
                 .from(order)
-                .where(order.coin.id.eq(coinId),
-                        oppositeOrderSide(orderSide),
-                        order.orderType.eq(OrderType.LIMIT),
-                        matchablePriceRange(orderSide, orderType, limitPrice),
-                        order.orderStatus.eq(OrderStatus.PENDING))
-                .orderBy(order.limitPrice.asc(), order.createdAt.asc())
-                .fetch();
+                .where(
+                        order.member.id.ne(o.getMember().getId()),
+                        order.coin.id.eq(o.getCoin().getId()),
+                        order.orderSide.ne(o.getOrderSide()),
+                        order.orderStatus.eq(OrderStatus.PENDING),
+                        order.orderType.eq(OrderType.LIMIT).and(
+                                matchablePriceRange(o.getOrderSide(), o.getOrderType(), o.getLimitPrice()))
+                )
+                .orderBy(sortByLimitPrice(o.getOrderSide()), order.createdAt.asc(), order.amount.desc())
+                .fetchFirst();
     }
 
-    private BooleanExpression oppositeOrderSide(OrderSide orderSide) {
-        if(orderSide == OrderSide.SELL) {
-            return order.orderSide.eq(OrderSide.BUY);
-        }
-
-        return order.orderSide.eq(OrderSide.SELL);
-    }
 
     private BooleanExpression matchablePriceRange(OrderSide orderSide, OrderType orderType, BigDecimal limitPrice) {
-        if(orderType == OrderType.MARKET)
+        if (orderType == OrderType.MARKET)
             return null;
 
-        if(orderSide == OrderSide.BUY)
+        if (orderSide == OrderSide.BUY)
             return order.limitPrice.loe(limitPrice);
 
         return order.limitPrice.goe(limitPrice);
+    }
+
+    private OrderSpecifier<BigDecimal> sortByLimitPrice(OrderSide orderSide) {
+        if (orderSide == OrderSide.SELL)
+            return order.limitPrice.desc();
+
+        return order.limitPrice.asc();
     }
 }
