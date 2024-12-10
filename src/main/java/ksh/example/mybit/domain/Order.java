@@ -3,6 +3,7 @@ package ksh.example.mybit.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "orders")
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class Order {
     @Id
     @Column(name = "order_id")
@@ -33,8 +35,8 @@ public class Order {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    public Order(Integer amount, OrderSide orderSide, OrderType orderType, BigDecimal limitPrice, Member member, Coin coin){
-        this.amount =  amount;
+    public Order(Integer amount, OrderSide orderSide, OrderType orderType, BigDecimal limitPrice, Member member, Coin coin) {
+        this.amount = amount;
         this.orderSide = orderSide;
         this.orderType = orderType;
         this.limitPrice = limitPrice;
@@ -47,15 +49,16 @@ public class Order {
 
     }
 
-    public void updateAmount(Integer volume){
+    public void updateAmount(Integer volume) {
         this.amount = this.amount - volume;
     }
 
-    public boolean isFinished(){
+    public boolean isFinished() {
         return this.amount == 0;
     }
 
     public void finish() {
         this.orderStatus = OrderStatus.FINISHED;
     }
+
 }

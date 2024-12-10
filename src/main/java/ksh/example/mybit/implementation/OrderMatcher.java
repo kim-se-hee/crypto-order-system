@@ -1,0 +1,48 @@
+package ksh.example.mybit.implementation;
+
+import ksh.example.mybit.domain.Order;
+import ksh.example.mybit.domain.Trade;
+import ksh.example.mybit.repository.TradeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+
+@Component
+@RequiredArgsConstructor
+public class TradeProcessor {
+    private final TradeRepository tradeRepository;
+
+    @Transactional
+    public Trade match(Order order, Order matchingOrder) {
+        Integer tradeVolume = calculateTradeVolume(order, matchingOrder);
+
+        order.updateAmount(tradeVolume);
+        matchingOrder.updateAmount(tradeVolume);
+
+        if (matchingOrder.isFinished()) {
+            matchingOrder.finish();
+        }
+
+        if (order.isFinished()) {
+            order.finish();
+        }
+
+        Trade executedTrade = new Trade(
+                order.getCoin().getPrice(),
+                tradeVolume,
+                order,
+                matchingOrder);
+        tradeRepository.save(executedTrade);
+
+        return executedTrade;
+
+    }
+
+    private Integer calculateTradeVolume(Order buyOrder, Order sellOrder) {
+        Integer buyAmount = buyOrder.getAmount();
+        Integer sellAmount = sellOrder.getAmount();
+        return Math.min(buyAmount, sellAmount);
+    }
+
+}
