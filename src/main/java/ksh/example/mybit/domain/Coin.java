@@ -22,5 +22,6 @@ public class Coin {
         this.price = price;
     }
 
-    public Coin() {}
+    public Coin() {
+    }
 }

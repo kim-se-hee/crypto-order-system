@@ -21,7 +21,10 @@ public class Member {
         this.name = name;
     }
 
-    public Member() {}
+    public Member() {
+    }
 
-    public Long getId() {return id;}
+    public Long getId() {
+        return id;
+    }
 }
