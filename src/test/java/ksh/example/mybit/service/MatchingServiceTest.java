@@ -1,46 +1,159 @@
 package ksh.example.mybit.service;
 
 import ksh.example.mybit.domain.*;
+import ksh.example.mybit.repository.CoinRepository;
+import ksh.example.mybit.repository.MemberCoinRepository;
+import ksh.example.mybit.repository.MemberRepository;
 import ksh.example.mybit.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class MatchingServiceTest {
 
-    @Autowired MatchingService matchingService;
-    @Autowired OrderRepository orderRepository;
+    @Autowired
+    MatchingService matchingService;
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    CoinRepository coinRepository;
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    MemberCoinRepository memberCoinRepository;
 
     @Test
-    public void 매칭_결과_테스트() throws Exception{
-        matchingService.matchOrder();
+    public void 지정가_지정가_매칭() throws Exception {
+        Member member1 = memberRepository.findById(1L).get();
+        Member member2 = memberRepository.findById(2L).get();
+        Coin btc = coinRepository.findById(1L).get();
 
-        List<Order> after = orderRepository.findAll();
-        List<Order> finished = after.stream()
-                .filter(o -> o.getOrderStatus().equals(OrderStatus.FINISHED))
-                .toList();
+        Order sellOrder = new Order(1000, OrderSide.SELL, OrderType.LIMIT, new BigDecimal(62000), member1, btc);
+        Order buyOrder = new Order(500, OrderSide.BUY, OrderType.LIMIT, new BigDecimal(62000), member2, btc);
+        orderRepository.save(sellOrder);
+        orderRepository.save(buyOrder);
 
-        List<Order> remain = after.stream()
-                .filter(o -> o.getOrderStatus().equals(OrderStatus.PENDING))
-                .toList();
+        Optional<Trade> optionalTrade = matchingService.matchOrder();
+        assertThat(optionalTrade).isPresent();
 
-        assertThat(finished.size()).isEqualTo(4);
-        assertThat(remain.size()).isEqualTo(1);
+        Trade trade = optionalTrade.get();
+        assertThat(trade.getExecutedAmount()).isEqualTo(500L);
+        assertThat(trade.getSellOrder().getId()).isEqualTo(sellOrder.getId());
+        assertThat(trade.getBuyOrder().getId()).isEqualTo(buyOrder.getId());
 
-        for (Order order : finished) {
-            assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.FINISHED);
-            assertThat(order.getAmount()).isEqualTo(0);
-        }
+        MemberCoin memberCoin1 = memberCoinRepository.findByMemberAndCoin(member1, btc).get();
+        assertThat(memberCoin1.getKoreanWonValue()).isEqualTo(9500L);
 
-        for (Order order : remain) {
-            assertThat(order.getOrderStatus()).isNotEqualTo(OrderStatus.FINISHED);
-            assertThat(order.getAmount()).isEqualTo(500);
-        }
+        MemberCoin memberCoin2 = memberCoinRepository.findByMemberAndCoin(member2, btc).get();
+        assertThat(memberCoin2.getKoreanWonValue()).isEqualTo(2500L);
+    }
+
+    @Test
+    public void 지정가_지정가_비매칭() throws Exception {
+        Member member1 = memberRepository.findById(1L).get();
+        Member member2 = memberRepository.findById(2L).get();
+        Coin btc = coinRepository.findById(1L).get();
+
+        Order sellOrder = new Order(1000, OrderSide.SELL, OrderType.LIMIT, new BigDecimal(62000), member1, btc);
+        Order buyOrder = new Order(500, OrderSide.BUY, OrderType.LIMIT, new BigDecimal(61000), member2, btc);
+        orderRepository.save(sellOrder);
+        orderRepository.save(buyOrder);
+
+        Optional<Trade> optionalTrade = matchingService.matchOrder();
+        assertThat(optionalTrade).isEmpty();
+    }
+
+    @Test
+    public void 비매칭_다른_코인() throws Exception {
+        Member member1 = memberRepository.findById(1L).get();
+        Member member2 = memberRepository.findById(2L).get();
+        Coin btc = coinRepository.findById(1L).get();
+        Coin eth = coinRepository.findById(2L).get();
+
+        Order sellOrder = new Order(1000, OrderSide.SELL, OrderType.LIMIT, new BigDecimal(62000), member1, btc);
+        Order buyOrder = new Order(500, OrderSide.BUY, OrderType.LIMIT, new BigDecimal(61000), member2, eth);
+        orderRepository.save(sellOrder);
+        orderRepository.save(buyOrder);
+
+        Optional<Trade> optionalTrade = matchingService.matchOrder();
+        assertThat(optionalTrade).isEmpty();
+    }
+
+    @Test
+    public void 지정가_시장가_매칭() throws Exception {
+        Member member1 = memberRepository.findById(1L).get();
+        Member member2 = memberRepository.findById(2L).get();
+        Coin btc = coinRepository.findById(1L).get();
+
+        Order sellOrder = new Order(1000, OrderSide.SELL, OrderType.LIMIT, new BigDecimal(62000), member1, btc);
+        Order buyOrder = new Order(500, OrderSide.BUY, OrderType.MARKET, null, member2, btc);
+        orderRepository.save(sellOrder);
+        orderRepository.save(buyOrder);
+
+        Optional<Trade> optionalTrade = matchingService.matchOrder();
+        assertThat(optionalTrade).isEmpty();
+    }
+
+    @Test
+    public void 둘_다_지정가_비싼_게_먼저_매칭() throws Exception {
+        Member member1 = memberRepository.findById(1L).get();
+        Member member2 = memberRepository.findById(2L).get();
+        Coin btc = coinRepository.findById(1L).get();
+
+        Order sellOrder = new Order(1000, OrderSide.SELL, OrderType.MARKET, null, member1, btc);
+        Order buyOrder1 = new Order(400, OrderSide.BUY, OrderType.LIMIT, new BigDecimal(62000), member2, btc);
+        Order buyOrder2 = new Order(600, OrderSide.BUY, OrderType.LIMIT, new BigDecimal(65000), member2, btc);
+        orderRepository.save(sellOrder);
+        orderRepository.save(buyOrder1);
+        orderRepository.save(buyOrder2);
+
+        Optional<Trade> optionalTrade = matchingService.matchOrder();
+        assertThat(optionalTrade).isPresent();
+
+        Trade trade = optionalTrade.get();
+        assertThat(trade.getExecutedAmount()).isEqualTo(600L);
+        assertThat(trade.getSellOrder().getId()).isEqualTo(sellOrder.getId());
+        assertThat(trade.getBuyOrder().getId()).isEqualTo(buyOrder2.getId());
+
+        MemberCoin memberCoin1 = memberCoinRepository.findByMemberAndCoin(member1, btc).get();
+        assertThat(memberCoin1.getKoreanWonValue()).isEqualTo(9400L);
+
+        MemberCoin memberCoin2 = memberCoinRepository.findByMemberAndCoin(member2, btc).get();
+        assertThat(memberCoin2.getKoreanWonValue()).isEqualTo(2600L);
+    }
+
+    @Test
+    public void 둘_다_지정가_지정가가_같아서_빠른_게_먼저_매칭() throws Exception {
+        Member member1 = memberRepository.findById(1L).get();
+        Member member2 = memberRepository.findById(2L).get();
+        Coin btc = coinRepository.findById(1L).get();
+
+        Order sellOrder = new Order(1000, OrderSide.SELL, OrderType.MARKET, null, member1, btc);
+        Order buyOrder1 = new Order(400, OrderSide.BUY, OrderType.LIMIT, new BigDecimal(65000), member2, btc);
+        Order buyOrder2 = new Order(600, OrderSide.BUY, OrderType.LIMIT, new BigDecimal(65000), member2, btc);
+        orderRepository.save(sellOrder);
+        orderRepository.save(buyOrder1);
+        orderRepository.save(buyOrder2);
+
+        Optional<Trade> optionalTrade = matchingService.matchOrder();
+        assertThat(optionalTrade).isPresent();
+
+        Trade trade = optionalTrade.get();
+        assertThat(trade.getExecutedAmount()).isEqualTo(400L);
+        assertThat(trade.getSellOrder().getId()).isEqualTo(sellOrder.getId());
+        assertThat(trade.getBuyOrder().getId()).isEqualTo(buyOrder1.getId());
+
+        MemberCoin memberCoin1 = memberCoinRepository.findByMemberAndCoin(member1, btc).get();
+        assertThat(memberCoin1.getKoreanWonValue()).isEqualTo(9600L);
+
+        MemberCoin memberCoin2 = memberCoinRepository.findByMemberAndCoin(member2, btc).get();
+        assertThat(memberCoin2.getKoreanWonValue()).isEqualTo(2400L);
     }
 
 }
