@@ -1,10 +1,12 @@
 package ksh.example.mybit.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
 @Entity
+@Getter
 public class MemberCoin {
     @Id
     @Column(name = "member_coin_id")
@@ -21,7 +23,7 @@ public class MemberCoin {
     @ManyToOne(fetch = FetchType.LAZY)
     Coin coin;
 
-    public boolean isLessThan(Integer amount){
+    public boolean isLessThan(Integer amount) {
         return this.koreanWonValue < amount;
     }
 
@@ -33,5 +35,13 @@ public class MemberCoin {
     }
 
     public MemberCoin() {
+    }
+
+    public void increaseKoreanWonValue(Integer amount) {
+        this.koreanWonValue += amount;
+    }
+
+    public void decreaseKoreanWonValue(Integer amount) {
+        this.koreanWonValue -= amount;
     }
 }

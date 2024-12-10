@@ -26,7 +26,7 @@ public class QTrade extends EntityPathBase<Trade> {
 
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
-    public final NumberPath<Long> executedAmount = createNumber("executedAmount", Long.class);
+    public final NumberPath<Integer> executedAmount = createNumber("executedAmount", Integer.class);
 
     public final NumberPath<java.math.BigDecimal> executedPrice = createNumber("executedPrice", java.math.BigDecimal.class);
 
