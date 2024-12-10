@@ -18,7 +18,7 @@ public class OrderService {
     private final CoinRepository coinRepository;
     private final MemberCoinRepository memberCoinRepository;
 
-    public Order addOrder(Order order){
+    public Order addOrder(Order order) {
         Member member = order.getMember();
         checkMemberIsValid(member);
 
@@ -33,14 +33,14 @@ public class OrderService {
     private void checkMemberIsValid(Member member) {
         Long memberId = member.getId();
         Optional<Member> optionalMember = memberRepository.findById(memberId);
-        if(optionalMember.isEmpty())
+        if (optionalMember.isEmpty())
             throw new IllegalArgumentException("존재하지 않는 회원입니다.");
     }
 
     private void checkMarketSupports(Coin coin) {
         Long coinId = coin.getId();
         Optional<Coin> optionalCoin = coinRepository.findById(coinId);
-        if(optionalCoin.isEmpty())
+        if (optionalCoin.isEmpty())
             throw new IllegalArgumentException("존재하지 않는 코인입니다.");
     }
 
@@ -48,7 +48,7 @@ public class OrderService {
         OrderSide orderSide = order.getOrderSide();
         Integer orderAmount = order.getAmount();
 
-        if(orderSide == OrderSide.SELL){
+        if (orderSide == OrderSide.SELL) {
             checkCoinInWallet(orderAmount, member, coin);
             return;
         }
@@ -57,20 +57,21 @@ public class OrderService {
     }
 
     private void checkCoinInWallet(Integer orderAmount, Member member, Coin coin) {
-        MemberCoin memberCoin = memberCoinRepository.findByMemberAndCoin(member, coin);
-        if(memberCoin == null)
+        Optional<MemberCoin> optionalMemberCoin = memberCoinRepository.findByMemberAndCoin(member, coin);
+        if (optionalMemberCoin.isEmpty())
             throw new IllegalArgumentException("보유하고 있지 않은 코인입니다.");
 
-        if(memberCoin.isLessThan(orderAmount))
+        MemberCoin memberCoin = optionalMemberCoin.get();
+        if (memberCoin.isLessThan(orderAmount))
             throw new IllegalArgumentException("보유 수량보다 매도 수량이 많습니다.");
     }
 
     private void checkKoreanWonInWallet(Member member, Integer orderAmount) {
         MemberCoin memberKoreanWon = memberCoinRepository.findKoreanWonByMember(member);
-        if(memberKoreanWon == null)
+        if (memberKoreanWon == null)
             throw new IllegalArgumentException("원화가 부족합니다.");
 
-        if(memberKoreanWon.isLessThan(orderAmount))
+        if (memberKoreanWon.isLessThan(orderAmount))
             throw new IllegalArgumentException("원화가 부족합니다.");
     }
 
