@@ -17,6 +17,11 @@ public class Validator {
     private final CoinRepository coinRepository;
     private final MemberCoinRepository memberCoinRepository;
 
+    public void checkEmailIsAvailable(String email) {
+        memberRepository.findByEmail(email)
+                .ifPresent(member -> {throw new IllegalArgumentException("해당 이메일은 사용할 수 없습니다.");});
+    }
+
     public void checkMemberIsValid(Member member) {
         memberRepository.findById(member.getId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
@@ -38,6 +43,8 @@ public class Validator {
 
         checkKoreanWonInWallet(member, orderAmount);
     }
+
+
 
     private void checkCoinInWallet(Integer orderAmount, Member member, Coin coin) {
         memberCoinRepository.findByMemberAndCoin(member, coin)
