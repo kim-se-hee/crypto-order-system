@@ -23,10 +23,6 @@ public class MemberCoin {
     @ManyToOne(fetch = FetchType.LAZY)
     Coin coin;
 
-    public boolean isLessThan(Integer amount) {
-        return this.koreanWonValue < amount;
-    }
-
     public MemberCoin(BigDecimal balance, Long koreanWonValue, Member member, Coin coin) {
         this.balance = balance;
         this.koreanWonValue = koreanWonValue;
