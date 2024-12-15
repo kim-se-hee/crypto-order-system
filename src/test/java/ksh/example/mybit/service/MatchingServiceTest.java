@@ -5,11 +5,13 @@ import ksh.example.mybit.repository.CoinRepository;
 import ksh.example.mybit.repository.MemberCoinRepository;
 import ksh.example.mybit.repository.MemberRepository;
 import ksh.example.mybit.repository.OrderRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,10 +41,7 @@ class MatchingServiceTest {
         orderRepository.save(sellOrder);
         orderRepository.save(buyOrder);
 
-        Optional<Trade> optionalTrade = matchingService.matchOrder();
-        assertThat(optionalTrade).isPresent();
-
-        Trade trade = optionalTrade.get();
+        Trade trade = matchingService.matchOrder();
         assertThat(trade.getExecutedAmount()).isEqualTo(500L);
         assertThat(trade.getSellOrder().getId()).isEqualTo(sellOrder.getId());
         assertThat(trade.getBuyOrder().getId()).isEqualTo(buyOrder.getId());
@@ -65,8 +64,7 @@ class MatchingServiceTest {
         orderRepository.save(sellOrder);
         orderRepository.save(buyOrder);
 
-        Optional<Trade> optionalTrade = matchingService.matchOrder();
-        assertThat(optionalTrade).isEmpty();
+        Assertions.assertThrows(NoSuchElementException.class, () -> matchingService.matchOrder());
     }
 
     @Test
@@ -81,8 +79,7 @@ class MatchingServiceTest {
         orderRepository.save(sellOrder);
         orderRepository.save(buyOrder);
 
-        Optional<Trade> optionalTrade = matchingService.matchOrder();
-        assertThat(optionalTrade).isEmpty();
+        Assertions.assertThrows(NoSuchElementException.class, () -> matchingService.matchOrder());
     }
 
     @Test
@@ -96,8 +93,16 @@ class MatchingServiceTest {
         orderRepository.save(sellOrder);
         orderRepository.save(buyOrder);
 
-        Optional<Trade> optionalTrade = matchingService.matchOrder();
-        assertThat(optionalTrade).isEmpty();
+        Trade trade = matchingService.matchOrder();
+        assertThat(trade.getExecutedAmount()).isEqualTo(500L);
+        assertThat(trade.getSellOrder().getId()).isEqualTo(sellOrder.getId());
+        assertThat(trade.getBuyOrder().getId()).isEqualTo(buyOrder.getId());
+
+        MemberCoin memberCoin1 = memberCoinRepository.findByMemberAndCoin(member1, btc).get();
+        assertThat(memberCoin1.getKoreanWonValue()).isEqualTo(9500L);
+
+        MemberCoin memberCoin2 = memberCoinRepository.findByMemberAndCoin(member2, btc).get();
+        assertThat(memberCoin2.getKoreanWonValue()).isEqualTo(2500L);
     }
 
     @Test
@@ -113,10 +118,7 @@ class MatchingServiceTest {
         orderRepository.save(buyOrder1);
         orderRepository.save(buyOrder2);
 
-        Optional<Trade> optionalTrade = matchingService.matchOrder();
-        assertThat(optionalTrade).isPresent();
-
-        Trade trade = optionalTrade.get();
+        Trade trade = matchingService.matchOrder();
         assertThat(trade.getExecutedAmount()).isEqualTo(600L);
         assertThat(trade.getSellOrder().getId()).isEqualTo(sellOrder.getId());
         assertThat(trade.getBuyOrder().getId()).isEqualTo(buyOrder2.getId());
@@ -141,10 +143,7 @@ class MatchingServiceTest {
         orderRepository.save(buyOrder1);
         orderRepository.save(buyOrder2);
 
-        Optional<Trade> optionalTrade = matchingService.matchOrder();
-        assertThat(optionalTrade).isPresent();
-
-        Trade trade = optionalTrade.get();
+        Trade trade = matchingService.matchOrder();
         assertThat(trade.getExecutedAmount()).isEqualTo(400L);
         assertThat(trade.getSellOrder().getId()).isEqualTo(sellOrder.getId());
         assertThat(trade.getBuyOrder().getId()).isEqualTo(buyOrder1.getId());
