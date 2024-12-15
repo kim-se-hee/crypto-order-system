@@ -34,7 +34,7 @@ public class OrderController {
                 member,
                 coin
         );
-        orderService.addOrder(order);
+        orderService.placeOrder(order);
         return ResponseEntity.ok(true);
     }
 }
