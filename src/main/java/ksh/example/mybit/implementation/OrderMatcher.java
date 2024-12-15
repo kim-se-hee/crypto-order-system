@@ -1,29 +1,19 @@
 package ksh.example.mybit.implementation;
 
 import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.OrderStatus;
 import ksh.example.mybit.domain.Trade;
-import ksh.example.mybit.repository.OrderRepository;
 import ksh.example.mybit.repository.TradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 
 @Component
 @RequiredArgsConstructor
 public class OrderMatcher {
     private final TradeRepository tradeRepository;
-    private final OrderRepository orderRepository;
 
-    public Optional<Trade> match() {
-        Order order = orderRepository.findFirstByOrderStatusOrderByCreatedAtAsc(OrderStatus.PENDING);
-        Order matchingOrder = orderRepository.findMatchingOrder(order);
 
-        if (matchingOrder == null) {
-            return Optional.empty();
-        }
+    public Trade match(Order order, Order matchingOrder) {
 
         Integer tradeVolume = calculateTradeVolume(order, matchingOrder);
 
@@ -36,7 +26,7 @@ public class OrderMatcher {
                 matchingOrder);
         tradeRepository.save(executedTrade);
 
-        return Optional.of(executedTrade);
+        return executedTrade;
 
     }
 
