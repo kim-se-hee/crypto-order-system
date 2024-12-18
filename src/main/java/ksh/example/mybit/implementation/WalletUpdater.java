@@ -20,7 +20,7 @@ public class WalletUpdater {
     private void updatePurchaserWallet(Trade trade) {
         Order order = trade.getBuyOrder();
 
-        MemberCoin memberCoin = memberCoinRepository
+        MemberCoin purchasedCoin = memberCoinRepository
                 .findByMemberAndCoin(order.getMember(), order.getCoin())
                 .orElseGet(() -> memberCoinRepository.save(
                         new MemberCoin(
@@ -31,17 +31,23 @@ public class WalletUpdater {
                         )
                 ));
 
+        purchasedCoin.increaseKoreanWonValue(trade.getExecutedAmount());
 
-        memberCoin.increaseKoreanWonValue(trade.getExecutedAmount());
+        memberCoinRepository
+                .findByMemberAndCoinTicker(order.getMember(), "won")
+                .ifPresent(won -> won.decreaseKoreanWonValue(trade.getExecutedAmount()));
     }
 
     private void updateSellerWallet(Trade trade) {
         Order order = trade.getSellOrder();
 
-        MemberCoin memberCoin = memberCoinRepository
+        MemberCoin soldCoin = memberCoinRepository
                 .findByMemberAndCoin(order.getMember(), order.getCoin())
                 .orElseThrow(() -> new IllegalArgumentException("지갑에 충분한 양의 코인이 없습니다."));
+        soldCoin.decreaseKoreanWonValue(trade.getExecutedAmount());
 
-        memberCoin.decreaseKoreanWonValue(trade.getExecutedAmount());
+        memberCoinRepository
+                .findByMemberAndCoinTicker(order.getMember(), "won")
+                .ifPresent(won -> won.increaseKoreanWonValue(trade.getExecutedAmount()));
     }
 }
