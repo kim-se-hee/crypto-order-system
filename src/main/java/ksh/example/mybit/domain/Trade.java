@@ -38,9 +38,5 @@ public class Trade {
 
     public Trade() {
     }
-
-    @Override
-    public String toString() {
-        return "id = " + id;
-    }
+    
 }
