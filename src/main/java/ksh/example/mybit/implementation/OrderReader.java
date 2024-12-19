@@ -11,13 +11,16 @@ import java.util.NoSuchElementException;
 @Component
 @RequiredArgsConstructor
 public class OrderReader {
+    private final CoinSelector coinSelector;
     private final OrderRepository orderRepository;
 
     public Order readMostPriorOrder() {
+        long coinId = coinSelector.getCurrentCoin();
+
         return orderRepository
-                .findMostPriorOrderTypeOf(OrderType.MARKET)
+                .findMostPriorOrderByOrderTypeAndCoinId(OrderType.MARKET, coinId)
                 .orElseGet(() -> orderRepository
-                        .findMostPriorOrderTypeOf(OrderType.LIMIT)
+                        .findMostPriorOrderByOrderTypeAndCoinId(OrderType.LIMIT, coinId)
                         .orElseThrow(NoSuchElementException::new));
 
 
@@ -28,4 +31,5 @@ public class OrderReader {
                 .findMatchingOrder(order)
                 .orElseThrow(NoSuchElementException::new);
     }
+
 }

@@ -24,14 +24,15 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public Optional<Order> findMostPriorOrderTypeOf(OrderType orderType) {
+    public Optional<Order> findMostPriorOrderByOrderTypeAndCoinId(OrderType orderType, Long coinId) {
         Order findOrder = queryFactory
                 .select(order)
                 .from(order)
                 .where(
                         order.orderStatus.eq(OrderStatus.PENDING),
                         order.orderType.eq(orderType),
-                        orderSideEquals(orderType)
+                        orderSideEquals(orderType),
+                        coinIdEquals(orderType, coinId)
                 )
                 .orderBy(
                         sortEntireOrderByLimitPrice(orderType),
@@ -42,6 +43,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
         return Optional.ofNullable(findOrder);
     }
+
 
     @Override
     public Optional<Order> findMatchingOrder(Order o) {
@@ -64,6 +66,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .fetchFirst();
 
         return Optional.ofNullable(findOrder);
+    }
+
+    private BooleanExpression coinIdEquals(OrderType orderType, Long coinId) {
+        if(orderType == OrderType.MARKET)
+            return null;
+
+        return order.coin.id.eq(coinId);
     }
 
     private BooleanExpression orderSideEquals(OrderType orderType) {
