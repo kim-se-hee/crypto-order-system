@@ -32,30 +32,43 @@ public class Validator {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 코인입니다."));
     }
 
-    public void checkWallet(Order order, Member member, Coin coin) {
+    public void checkOrderIsValid(Order order) {
+        checkMemberIsValid(order.getMember());
+
+        checkMarketSupports(order.getCoin());
+
+        checkWalletBefore(order);
+    }
+
+    private void checkWalletBefore(Order order) {
         OrderSide orderSide = order.getOrderSide();
-        Integer orderAmount = order.getAmount();
 
         if (orderSide == OrderSide.SELL) {
-            checkCoinInWallet(orderAmount, member, coin);
+            checkCoinInWallet(order);
             return;
         }
 
-        checkKoreanWonInWallet(member, orderAmount);
+        checkKoreanWonInWallet(order);
     }
 
+    private void checkCoinInWallet(Order order) {
+        Member member = order.getMember();
+        Coin coin = order.getCoin();
+        Integer orderAmount = order.getAmount();
 
-
-    private void checkCoinInWallet(Integer orderAmount, Member member, Coin coin) {
         memberCoinRepository.findByMemberAndCoin(member, coin)
                 .filter(memberCoin -> memberCoin.getKoreanWonValue() >= orderAmount)
                 .orElseThrow(() -> new IllegalArgumentException("보유 수량보다 매도 수량이 많습니다."));
 
     }
 
-    private void checkKoreanWonInWallet(Member member, Integer orderAmount) {
+    private void checkKoreanWonInWallet(Order order) {
+        Member member = order.getMember();
+        Integer orderAmount = order.getAmount();
+
         memberCoinRepository.findByMemberAndCoinTicker(member, "won")
                 .filter(memberCoin -> memberCoin.getKoreanWonValue() >= orderAmount)
                 .orElseThrow(() -> new IllegalArgumentException("원화가 부족합니다."));
     }
+
 }
