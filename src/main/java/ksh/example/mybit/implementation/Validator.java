@@ -1,12 +1,10 @@
 package ksh.example.mybit.implementation;
 
-import ksh.example.mybit.domain.Coin;
-import ksh.example.mybit.domain.Member;
-import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.OrderSide;
+import ksh.example.mybit.domain.*;
 import ksh.example.mybit.repository.CoinRepository;
 import ksh.example.mybit.repository.MemberCoinRepository;
 import ksh.example.mybit.repository.MemberRepository;
+import ksh.example.mybit.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +14,7 @@ public class Validator {
     private final MemberRepository memberRepository;
     private final CoinRepository coinRepository;
     private final MemberCoinRepository memberCoinRepository;
+    private final OrderRepository orderRepository;
 
     public void checkEmailIsAvailable(String email) {
         memberRepository.findByEmail(email)
@@ -37,38 +36,47 @@ public class Validator {
 
         checkMarketSupports(order.getCoin());
 
-        checkWalletBefore(order);
+        checkAvailableOrderAmount(order);
     }
 
-    private void checkWalletBefore(Order order) {
+    private void checkAvailableOrderAmount(Order order) {
         OrderSide orderSide = order.getOrderSide();
 
         if (orderSide == OrderSide.SELL) {
-            checkCoinInWallet(order);
+            checkAvailableCoinAmount(order);
             return;
         }
 
-        checkKoreanWonInWallet(order);
+        checkAvailableKoreanWonAmount(order);
     }
 
-    private void checkCoinInWallet(Order order) {
+    private void checkAvailableCoinAmount(Order order) {
         Member member = order.getMember();
         Coin coin = order.getCoin();
-        Integer orderAmount = order.getAmount();
 
-        memberCoinRepository.findByMemberAndCoin(member, coin)
-                .filter(memberCoin -> memberCoin.getKoreanWonValue() >= orderAmount)
+        MemberCoin memberCoin = memberCoinRepository.findByMemberAndCoin(member, coin)
                 .orElseThrow(() -> new IllegalArgumentException("보유 수량보다 매도 수량이 많습니다."));
 
+        Long pendingAmount = orderRepository.sumPendingOrderAmount(OrderSide.SELL, member, coin);
+        long availableAmount = memberCoin.getKoreanWonValue() - pendingAmount;
+
+        if (availableAmount < order.getAmount()) {
+            throw new IllegalArgumentException("주문 가능한 수량이 부족합니다");
+        }
     }
 
-    private void checkKoreanWonInWallet(Order order) {
+    private void checkAvailableKoreanWonAmount(Order order) {
         Member member = order.getMember();
-        Integer orderAmount = order.getAmount();
 
-        memberCoinRepository.findByMemberAndCoinTicker(member, "won")
-                .filter(memberCoin -> memberCoin.getKoreanWonValue() >= orderAmount)
+        MemberCoin memberCoin = memberCoinRepository.findByMemberAndCoinTicker(member, "won")
                 .orElseThrow(() -> new IllegalArgumentException("원화가 부족합니다."));
+
+        Long pendingAmount = orderRepository.sumPendingOrderAmount(OrderSide.BUY, member, null);
+        long availableAmount = memberCoin.getKoreanWonValue() - pendingAmount;
+
+        if (availableAmount < order.getAmount()) {
+            throw new IllegalArgumentException("주문 가능한 금액이 부족합니다");
+        }
     }
 
 }
