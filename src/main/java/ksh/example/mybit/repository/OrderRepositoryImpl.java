@@ -5,10 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.OrderSide;
-import ksh.example.mybit.domain.OrderStatus;
-import ksh.example.mybit.domain.OrderType;
+import ksh.example.mybit.domain.*;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -68,6 +65,24 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         return Optional.ofNullable(findOrder);
     }
 
+    @Override
+    public Long sumPendingOrderAmount(OrderSide orderSide, Member member, Coin coin) {
+        Integer sum = queryFactory
+                .select(order.amount.sum())
+                .from(order)
+                .where(
+                        order.member.eq(member),
+                        coin == null ? null : order.coin.eq(coin),
+                        order.orderSide.eq(orderSide),
+                        order.orderStatus.eq(OrderStatus.PENDING))
+                .fetchOne();
+
+        if(sum == null)
+            return 0l;
+
+        return sum.longValue();
+    }
+
     private BooleanExpression coinIdEquals(OrderType orderType, Long coinId) {
         if(orderType == OrderType.MARKET)
             return null;
@@ -106,4 +121,5 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
         return order.limitPrice.asc();
     }
+
 }
