@@ -13,4 +13,5 @@ public interface OrderRepositoryCustom {
 
     Long sumPendingOrderAmount(OrderSide orderSide, Member member, Coin coin);
 
+    Optional<Order> findLatestOrder(Member member, Coin coin, OrderSide orderSide);
 }

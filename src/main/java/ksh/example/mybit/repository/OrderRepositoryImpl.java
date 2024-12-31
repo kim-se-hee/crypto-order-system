@@ -83,6 +83,22 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         return sum.longValue();
     }
 
+    @Override
+    public Optional<Order> findLatestOrder(Member member, Coin coin, OrderSide orderSide) {
+        Order latestOrder = queryFactory
+                .select(order)
+                .from(order)
+                .where(
+                        order.member.eq(member),
+                        order.coin.eq(coin),
+                        order.orderSide.eq(orderSide)
+                )
+                .orderBy(order.createdAt.asc())
+                .fetchFirst();
+
+        return Optional.ofNullable(latestOrder);
+    }
+
     private BooleanExpression coinIdEquals(OrderType orderType, Long coinId) {
         if(orderType == OrderType.MARKET)
             return null;
