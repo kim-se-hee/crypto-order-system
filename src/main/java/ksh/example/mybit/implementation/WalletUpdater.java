@@ -38,6 +38,14 @@ public class WalletUpdater {
                 .ifPresent(won -> won.decreaseKoreanWonValue(trade.getExecutedAmount()));
     }
 
+    public void increaseAmountOf(MemberCoin memberCoin, Integer amount) {
+        memberCoin.increaseKoreanWonValue(amount);
+    }
+
+    public void decreaseAmountOf(MemberCoin memberCoin, Integer amount) {
+        memberCoin.decreaseKoreanWonValue(amount);
+    }
+
     private void updateSellerWallet(Trade trade) {
         Order order = trade.getSellOrder();
 
@@ -50,4 +58,7 @@ public class WalletUpdater {
                 .findByMemberAndCoinTicker(order.getMember(), "won")
                 .ifPresent(won -> won.increaseKoreanWonValue(trade.getExecutedAmount()));
     }
+
+
+
 }
