@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class WalletUpdater {
     private final MemberCoinRepository memberCoinRepository;
 
-    public void updateWallet(Trade trade) {
+    public void reflectMatchingResult(Trade trade) {
         updatePurchaserWallet(trade);
         updateSellerWallet(trade);
     }

@@ -24,7 +24,7 @@ public class MatchingService {
 
         Trade executedTrade = orderMatcher.match(order, matchingOrder);
 
-        walletUpdater.updateWallet(executedTrade);
+        walletUpdater.reflectMatchingResult(executedTrade);
 
         return executedTrade;
     }
