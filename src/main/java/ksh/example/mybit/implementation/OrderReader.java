@@ -1,12 +1,12 @@
 package ksh.example.mybit.implementation;
 
-import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.OrderType;
+import ksh.example.mybit.domain.*;
 import ksh.example.mybit.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -32,4 +32,7 @@ public class OrderReader {
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    public Optional<Order> readLatestOrderBy(Member member, Coin coin, OrderSide orderSide){
+        return orderRepository.findLatestOrder(member, coin, orderSide);
+    }
 }

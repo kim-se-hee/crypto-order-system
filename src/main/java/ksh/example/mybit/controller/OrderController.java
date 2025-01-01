@@ -6,9 +6,9 @@ import ksh.example.mybit.domain.Coin;
 import ksh.example.mybit.domain.Member;
 import ksh.example.mybit.domain.Order;
 import ksh.example.mybit.service.CoinService;
+import ksh.example.mybit.service.LockService;
 import ksh.example.mybit.service.MemberService;
 import ksh.example.mybit.service.OrderService;
-import ksh.example.mybit.util.LockManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,17 +22,15 @@ public class OrderController {
     private final MemberService memberService;
     private final CoinService coinService;
 
-    private final LockManager lockManager;
+    private final LockService lockService;
 
     @PostMapping("/order")
     public ResponseEntity<Boolean> orderAdd(@Valid @ModelAttribute OrderForm orderForm) {
-        lockManager.tryLock(orderForm.getMemberId());
+        lockService.tryLock(orderForm.getMemberId());
 
         try{
             Member member = memberService.findMember(orderForm.getMemberId());
             Coin coin = coinService.findCoin(orderForm.getCoinId());
-
-            orderService.checkTimeIntervalBetweenCurrentAndOrder(member, coin, orderForm.getOrderSide());
 
             Order order = new Order(
                     orderForm.getOrderAmount(),
@@ -46,7 +44,7 @@ public class OrderController {
 
             orderService.placeOrder(order);
         }finally{
-            lockManager.unLock(orderForm.getMemberId());
+            lockService.unLock(orderForm.getMemberId());
         }
 
 

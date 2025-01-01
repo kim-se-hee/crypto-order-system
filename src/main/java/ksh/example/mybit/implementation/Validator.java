@@ -8,6 +8,9 @@ import ksh.example.mybit.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class Validator {
@@ -15,10 +18,13 @@ public class Validator {
     private final CoinRepository coinRepository;
     private final MemberCoinRepository memberCoinRepository;
     private final OrderRepository orderRepository;
+    private final OrderReader orderReader;
 
     public void checkEmailIsAvailable(String email) {
         memberRepository.findByEmail(email)
-                .ifPresent(member -> {throw new IllegalArgumentException("해당 이메일은 사용할 수 없습니다.");});
+                .ifPresent(member -> {
+                    throw new IllegalArgumentException("해당 이메일은 사용할 수 없습니다.");
+                });
     }
 
     public void checkMemberIsValid(Member member) {
@@ -32,11 +38,21 @@ public class Validator {
     }
 
     public void checkOrderIsValid(Order order) {
+
         checkMemberIsValid(order.getMember());
 
         checkMarketSupports(order.getCoin());
 
         checkAvailableOrderAmount(order);
+    }
+
+    public void checkTimeIntervalFromLatestOrder(Order order) {
+        orderReader.readLatestOrderBy(order.getMember(), order.getCoin(), order.getOrderSide())
+                .ifPresent(o -> {
+                    if (calculateTimeInterval(o) < 5000) {
+                        throw new IllegalStateException("너무 자주 요청했습니다.");
+                    }
+                });
     }
 
     private void checkAvailableOrderAmount(Order order) {
@@ -77,6 +93,10 @@ public class Validator {
         if (availableAmount < order.getAmount()) {
             throw new IllegalArgumentException("주문 가능한 금액이 부족합니다");
         }
+    }
+
+    private static long calculateTimeInterval(Order order) {
+        return Duration.between(order.getCreatedAt(), LocalDateTime.now()).toMillis();
     }
 
 }
