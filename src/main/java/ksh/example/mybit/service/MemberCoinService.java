@@ -16,14 +16,14 @@ public class MemberCoinService {
 
     @Transactional
     public void deposit(Long memberId, Long coinId, Integer amount) {
-        MemberCoin memberCoin = walletReader.readMemberCoin(memberId, coinId);
+        MemberCoin memberCoin = walletReader.readMemberCoinWithLock(memberId, coinId);
 
         walletUpdater.increaseAmountOf(memberCoin, amount);
     }
 
     @Transactional
     public void withdraw(Long memberId, Long coinId, Integer amount) {
-        MemberCoin memberCoin = walletReader.readMemberCoin(memberId, coinId);
+        MemberCoin memberCoin = walletReader.readMemberCoinWithLock(memberId, coinId);
 
         if(memberCoin.getKoreanWonValue() < amount) {
             throw new IllegalArgumentException("보유 수량이 부족합니다");
