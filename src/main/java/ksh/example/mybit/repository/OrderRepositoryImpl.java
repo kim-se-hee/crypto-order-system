@@ -5,6 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import ksh.example.mybit.domain.*;
 
 import java.math.BigDecimal;
@@ -36,6 +37,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         order.createdAt.asc(),
                         order.amount.desc()
                 )
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .fetchFirst();
 
         return Optional.ofNullable(findOrder);
@@ -60,6 +62,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         order.createdAt.asc(),
                         order.amount.desc()
                 )
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .fetchFirst();
 
         return Optional.ofNullable(findOrder);
