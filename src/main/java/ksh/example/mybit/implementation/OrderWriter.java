@@ -2,7 +2,6 @@ package ksh.example.mybit.implementation;
 
 import ksh.example.mybit.domain.Order;
 import ksh.example.mybit.repository.OrderRepository;
-import ksh.example.mybit.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,5 +13,10 @@ public class OrderWriter {
 
     public Order save(Order order) {
         return orderRepository.save(order);
+    }
+
+    public void cancel(Long orderId) {
+        orderRepository.findById(orderId)
+                .ifPresent(Order::cancel);
     }
 }

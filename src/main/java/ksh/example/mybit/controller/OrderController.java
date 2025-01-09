@@ -11,9 +11,7 @@ import ksh.example.mybit.service.MemberService;
 import ksh.example.mybit.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,6 +45,13 @@ public class OrderController {
             lockService.unLock(orderForm.getMemberId());
         }
 
+
+        return ResponseEntity.ok(true);
+    }
+
+    @DeleteMapping("/order/{id}")
+    public ResponseEntity<Boolean> orderDelete(@PathVariable Long id) {
+        orderService.cancelOrder(id);
 
         return ResponseEntity.ok(true);
     }

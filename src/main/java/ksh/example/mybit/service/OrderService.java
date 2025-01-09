@@ -1,19 +1,12 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.domain.Coin;
-import ksh.example.mybit.domain.Member;
 import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.OrderSide;
-import ksh.example.mybit.implementation.OrderReader;
 import ksh.example.mybit.implementation.OrderWriter;
 import ksh.example.mybit.implementation.Validator;
-import ksh.example.mybit.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +15,7 @@ public class OrderService {
     private final Validator validator;
     private final OrderWriter orderWriter;
 
+    @Transactional
     public Order placeOrder(Order order) {
         validator.checkTimeIntervalFromLatestOrder(order);
 
@@ -31,4 +25,10 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        validator.checkOrderIsPending(orderId);
+
+        orderWriter.cancel(orderId);
+    }
 }

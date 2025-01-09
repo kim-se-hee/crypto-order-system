@@ -61,4 +61,7 @@ public class Order {
         this.orderStatus = OrderStatus.FINISHED;
     }
 
+    public void cancel() {
+        this.orderStatus = OrderStatus.CANCELED;
+    }
 }
