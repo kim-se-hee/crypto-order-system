@@ -7,6 +7,7 @@ import ksh.example.mybit.domain.MemberCoin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberCoinRepository extends JpaRepository<MemberCoin, Long> {
@@ -24,5 +25,7 @@ public interface MemberCoinRepository extends JpaRepository<MemberCoin, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<MemberCoin> findWithWriteLockByMemberAndCoinTicker(Member member, String coinTicker);
+
+    List<MemberCoin> findByMemberId(Long memberId);
 
 }

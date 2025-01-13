@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberCoinService {
@@ -30,5 +32,10 @@ public class MemberCoinService {
         }
 
         walletUpdater.decreaseAmountOf(memberCoin, amount);
+    }
+
+    @Transactional
+    public List<MemberCoin> findAllCoinsInWallet(Long id) {
+        return walletReader.readAllCoinOfMember(id);
     }
 }
