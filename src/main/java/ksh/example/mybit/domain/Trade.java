@@ -16,7 +16,7 @@ public class Trade {
     @Column(name = "trade_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long executedQuantity;
+    private BigDecimal executedQuantity;
     private BigDecimal executedPrice;
     private Integer executedAmount;
 
