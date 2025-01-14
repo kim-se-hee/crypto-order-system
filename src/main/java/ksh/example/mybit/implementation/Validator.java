@@ -27,8 +27,8 @@ public class Validator {
                 });
     }
 
-    public void checkMemberIsValid(Member member) {
-        memberRepository.findById(member.getId())
+    public void checkMemberIsValid(Long memberId) {
+        memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
     }
 
@@ -39,7 +39,7 @@ public class Validator {
 
     public void checkOrderIsValid(Order order) {
 
-        checkMemberIsValid(order.getMember());
+        checkMemberIsValid(order.getMember().getId());
 
         checkMarketSupports(order.getCoin());
 
