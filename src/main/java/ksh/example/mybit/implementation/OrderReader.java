@@ -3,8 +3,10 @@ package ksh.example.mybit.implementation;
 import ksh.example.mybit.domain.*;
 import ksh.example.mybit.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -34,5 +36,9 @@ public class OrderReader {
 
     public Optional<Order> readLatestOrderBy(Member member, Coin coin, OrderSide orderSide){
         return orderRepository.findLatestOrder(member, coin, orderSide);
+    }
+
+    public List<Order> readPendingOrdersBy(Long memberId, Long coinId, Pageable pageable) {
+        return orderRepository.findPendingOrdersBy(memberId, coinId, pageable);
     }
 }

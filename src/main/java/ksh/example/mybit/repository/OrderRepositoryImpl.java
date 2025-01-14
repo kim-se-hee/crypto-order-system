@@ -7,8 +7,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import ksh.example.mybit.domain.*;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static ksh.example.mybit.domain.QOrder.order;
@@ -100,6 +102,22 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .fetchFirst();
 
         return Optional.ofNullable(latestOrder);
+    }
+
+    @Override
+    public List<Order> findPendingOrdersBy(Long memberId, Long coinId, Pageable pageable) {
+        return queryFactory
+                .select(order)
+                .from(order)
+                .where(
+                        order.member.id.eq(memberId),
+                        order.coin.id.eq(coinId),
+                        order.orderStatus.eq(OrderStatus.PENDING)
+                )
+                .orderBy(order.createdAt.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 
     private BooleanExpression coinIdEquals(OrderType orderType, Long coinId) {
