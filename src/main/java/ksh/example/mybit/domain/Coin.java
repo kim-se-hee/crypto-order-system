@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.Random;
 
 @Entity
 @Getter
@@ -13,13 +14,22 @@ public class Coin {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String name;
+
     private String ticker;
 
     private BigDecimal price;
 
-    public Coin(String ticker, BigDecimal price) {
+    private BigDecimal tick;
+
+    private BigDecimal closingPrice;
+
+    public Coin(String name, String ticker, BigDecimal price, BigDecimal tick) {
+        this.name = name;
         this.ticker = ticker;
         this.price = price;
+        this.tick = tick;
+        this.closingPrice = price.multiply(BigDecimal.valueOf(new Random().nextDouble()));
     }
 
     public Coin() {
