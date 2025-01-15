@@ -25,12 +25,14 @@ public class OrdersResponseDto {
     @Setter
     static class OrderResponseDto {
 
+        Long id;
         OrderSide orderSide;
         String ticker;
         Integer amount;
         BigDecimal quantity;
 
         public OrderResponseDto(Order order) {
+            this.id = order.getId();
             this.orderSide = order.getOrderSide();
             this.ticker = order.getCoin().getTicker();
             this.amount = order.getAmount();
