@@ -36,5 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-### 테스트 데이터 생성 서비스 ###
+### 테스트 데이터 생성 ###
 src/main/java/ksh/example/mybit/InitDb.java
+src/main/resources/coins.txt
