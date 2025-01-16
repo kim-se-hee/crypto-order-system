@@ -1,8 +1,14 @@
 package ksh.example.mybit.repository;
 
-import ksh.example.mybit.domain.*;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Coin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderSide;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderType;
+import ksh.example.mybit.persistence.mysql.jpa.repository.CoinRepository;
+import ksh.example.mybit.persistence.mysql.jpa.repository.MemberRepository;
+import ksh.example.mybit.persistence.mysql.jpa.repository.OrderRepository;
 import ksh.example.mybit.service.MatchingService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,9 +20,12 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 class OrderRepositoryTest {
 
-    @Autowired OrderRepository orderRepository;
-    @Autowired MemberRepository memberRepository;
-    @Autowired CoinRepository coinRepository;
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    CoinRepository coinRepository;
 
     @Autowired MatchingService matchingService;
 

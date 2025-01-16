@@ -1,7 +1,11 @@
 package ksh.example.mybit.implementation;
 
-import ksh.example.mybit.domain.*;
-import ksh.example.mybit.repository.OrderRepository;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Coin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderSide;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderType;
+import ksh.example.mybit.persistence.mysql.jpa.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

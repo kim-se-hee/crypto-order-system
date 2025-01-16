@@ -1,9 +1,9 @@
-package ksh.example.mybit.repository;
+package ksh.example.mybit.persistence.mysql.jpa.repository;
 
 import jakarta.persistence.LockModeType;
-import ksh.example.mybit.domain.Coin;
-import ksh.example.mybit.domain.Member;
-import ksh.example.mybit.domain.MemberCoin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Coin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.MemberCoin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 

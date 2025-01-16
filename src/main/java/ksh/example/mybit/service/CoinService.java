@@ -1,7 +1,7 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.domain.Coin;
-import ksh.example.mybit.repository.CoinRepository;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Coin;
+import ksh.example.mybit.persistence.mysql.jpa.repository.CoinRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

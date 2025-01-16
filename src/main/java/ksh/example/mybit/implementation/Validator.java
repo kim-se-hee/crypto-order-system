@@ -1,10 +1,15 @@
 package ksh.example.mybit.implementation;
 
-import ksh.example.mybit.domain.*;
-import ksh.example.mybit.repository.CoinRepository;
-import ksh.example.mybit.repository.MemberCoinRepository;
-import ksh.example.mybit.repository.MemberRepository;
-import ksh.example.mybit.repository.OrderRepository;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Coin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.MemberCoin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderSide;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderStatus;
+import ksh.example.mybit.persistence.mysql.jpa.repository.CoinRepository;
+import ksh.example.mybit.persistence.mysql.jpa.repository.MemberCoinRepository;
+import ksh.example.mybit.persistence.mysql.jpa.repository.MemberRepository;
+import ksh.example.mybit.persistence.mysql.jpa.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

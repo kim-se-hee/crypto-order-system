@@ -2,7 +2,7 @@ package ksh.example.mybit.controller;
 
 import jakarta.validation.Valid;
 import ksh.example.mybit.controller.form.MemberJoinForm;
-import ksh.example.mybit.domain.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
 import ksh.example.mybit.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

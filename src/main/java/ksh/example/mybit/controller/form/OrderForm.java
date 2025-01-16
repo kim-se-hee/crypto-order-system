@@ -1,8 +1,8 @@
 package ksh.example.mybit.controller.form;
 
 import jakarta.validation.constraints.NotNull;
-import ksh.example.mybit.domain.OrderSide;
-import ksh.example.mybit.domain.OrderType;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderSide;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;

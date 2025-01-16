@@ -1,8 +1,12 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.domain.*;
-import ksh.example.mybit.repository.CoinRepository;
-import ksh.example.mybit.repository.MemberRepository;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Coin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderSide;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderType;
+import ksh.example.mybit.persistence.mysql.jpa.repository.CoinRepository;
+import ksh.example.mybit.persistence.mysql.jpa.repository.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,8 @@ class OrderServiceTest {
         orderService.placeOrder(order1);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {orderService.placeOrder(order2);});
+        // 1. 상태 검사
+        // 2. 행위 검사
     }
 
     @Test

@@ -1,8 +1,8 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.domain.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
 import ksh.example.mybit.implementation.Validator;
-import ksh.example.mybit.repository.MemberRepository;
+import ksh.example.mybit.persistence.mysql.jpa.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

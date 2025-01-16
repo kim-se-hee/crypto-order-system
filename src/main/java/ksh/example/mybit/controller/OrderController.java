@@ -2,9 +2,9 @@ package ksh.example.mybit.controller;
 
 import jakarta.validation.Valid;
 import ksh.example.mybit.controller.form.OrderForm;
-import ksh.example.mybit.domain.Coin;
-import ksh.example.mybit.domain.Member;
-import ksh.example.mybit.domain.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Coin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
 import ksh.example.mybit.service.CoinService;
 import ksh.example.mybit.service.LockService;
 import ksh.example.mybit.service.MemberService;
@@ -17,29 +17,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
-    private final MemberService memberService;
-    private final CoinService coinService;
-
     private final LockService lockService;
 
+    // controller -> service -> implementation -> repository(jpa) / entity(jpa)
+    // 1. entity 얘는 무엇을 의존하고 있는가? -> 현재는 없음.
+    // 2. entity 를 의존하고 있는 것은 무엇인가?
     @PostMapping("/order")
     public ResponseEntity<Boolean> orderAdd(@Valid @ModelAttribute OrderForm orderForm) {
         lockService.tryLock(orderForm.getMemberId());
 
         try{
-            Member member = memberService.findMember(orderForm.getMemberId());
-            Coin coin = coinService.findCoin(orderForm.getCoinId());
-
-            Order order = new Order(
-                    orderForm.getOrderAmount(),
-                    orderForm.getOrderSide(),
-                    orderForm.getOrderType(),
-                    orderForm.getLimitPrice(),
-                    member,
-                    coin
-            );
-
-
             orderService.placeOrder(order);
         }finally{
             lockService.unLock(orderForm.getMemberId());
