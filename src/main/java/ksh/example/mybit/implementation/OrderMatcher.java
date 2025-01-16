@@ -1,8 +1,8 @@
 package ksh.example.mybit.implementation;
 
-import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.Trade;
-import ksh.example.mybit.repository.TradeRepository;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Trade;
+import ksh.example.mybit.persistence.mysql.jpa.repository.TradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

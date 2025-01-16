@@ -1,6 +1,6 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.domain.MemberCoin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.MemberCoin;
 import ksh.example.mybit.implementation.WalletReader;
 import ksh.example.mybit.implementation.WalletUpdater;
 import lombok.RequiredArgsConstructor;

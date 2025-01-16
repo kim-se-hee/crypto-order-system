@@ -1,6 +1,6 @@
-package ksh.example.mybit.repository;
+package ksh.example.mybit.persistence.mysql.jpa.repository;
 
-import ksh.example.mybit.domain.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

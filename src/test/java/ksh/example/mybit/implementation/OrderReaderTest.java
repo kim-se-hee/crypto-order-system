@@ -1,9 +1,9 @@
 package ksh.example.mybit.implementation;
 
-import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.OrderSide;
-import ksh.example.mybit.domain.OrderType;
-import ksh.example.mybit.repository.OrderRepository;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderSide;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderType;
+import ksh.example.mybit.persistence.mysql.jpa.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

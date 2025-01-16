@@ -1,7 +1,7 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.Trade;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Trade;
 import ksh.example.mybit.implementation.OrderMatcher;
 import ksh.example.mybit.implementation.OrderReader;
 import ksh.example.mybit.implementation.WalletUpdater;

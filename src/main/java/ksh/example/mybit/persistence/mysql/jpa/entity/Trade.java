@@ -1,6 +1,7 @@
-package ksh.example.mybit.domain;
+package ksh.example.mybit.persistence.mysql.jpa.entity;
 
 import jakarta.persistence.*;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderSide;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

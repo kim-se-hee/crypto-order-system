@@ -1,4 +1,4 @@
-package ksh.example.mybit.repository;
+package ksh.example.mybit.persistence.mysql.jpa.repository;
 
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.OrderSpecifier;
@@ -6,7 +6,12 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
-import ksh.example.mybit.domain.*;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Coin;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Member;
+import ksh.example.mybit.persistence.mysql.jpa.entity.Order;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderSide;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderStatus;
+import ksh.example.mybit.persistence.mysql.jpa.entity.type.OrderType;
 
 import java.math.BigDecimal;
 import java.util.Optional;

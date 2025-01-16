@@ -1,4 +1,4 @@
-package ksh.example.mybit.domain;
+package ksh.example.mybit.persistence.mysql.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
