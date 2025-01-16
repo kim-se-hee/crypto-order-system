@@ -16,13 +16,13 @@ public class TradeHistoryDto {
     String ticker;
     LocalDateTime tradeDateTime;
     BigDecimal executedQuantity;
-    Integer executedKoreanValue;
+    Integer executedVolume;
 
     public TradeHistoryDto(Trade trade, Long memberId) {
         this.orderSide = trade.getSellOrder().getMember().getId() == memberId ? OrderSide.SELL : OrderSide.BUY;
         this.ticker = trade.getSellOrder().getCoin().getTicker();
         this.tradeDateTime = trade.getCreatedAt();
         this.executedQuantity = trade.getExecutedQuantity();
-        this.executedKoreanValue = trade.getExecutedAmount();
+        this.executedVolume = trade.getExecutedVolume();
     }
 }

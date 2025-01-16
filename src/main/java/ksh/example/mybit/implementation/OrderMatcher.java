@@ -6,6 +6,9 @@ import ksh.example.mybit.repository.TradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 
 @Component
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class OrderMatcher {
         updateOrderAmount(order, matchingOrder, tradeVolume);
 
         Trade executedTrade = new Trade(
+                new BigDecimal(tradeVolume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP),
                 order.getCoin().getPrice(),
                 tradeVolume,
                 order,

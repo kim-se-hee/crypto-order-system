@@ -18,7 +18,7 @@ public class Trade {
     private Long id;
     private BigDecimal executedQuantity;
     private BigDecimal executedPrice;
-    private Integer executedAmount;
+    private Integer executedVolume;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -29,9 +29,10 @@ public class Trade {
     @ManyToOne(fetch = FetchType.LAZY)
     private Order sellOrder;
 
-    public Trade(BigDecimal executedPrice, Integer executedAmount, Order order, Order matchingOrder) {
+    public Trade(BigDecimal executedQuantity, BigDecimal executedPrice, Integer executedVolume, Order order, Order matchingOrder) {
+        this.executedQuantity = executedQuantity;
         this.executedPrice = executedPrice;
-        this.executedAmount = executedAmount;
+        this.executedVolume = executedVolume;
         this.buyOrder = order.getOrderSide() == OrderSide.BUY ? order : matchingOrder;
         this.sellOrder = order.getOrderSide() == OrderSide.SELL ? order : matchingOrder;
     }
