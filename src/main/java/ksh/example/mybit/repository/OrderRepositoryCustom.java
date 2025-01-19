@@ -13,7 +13,7 @@ public interface OrderRepositoryCustom {
 
     Optional<Order> findMatchingOrder(Order order);;
 
-    Long sumPendingOrderAmount(OrderSide orderSide, Member member, Coin coin);
+    Long sumPendingOrderVolume(OrderSide orderSide, Member member, Coin coin);
 
     Optional<Order> findLatestOrder(Member member, Coin coin, OrderSide orderSide);
 

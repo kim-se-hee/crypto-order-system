@@ -20,7 +20,7 @@ public class MemberCoinService {
     public void deposit(Long memberId, Long coinId, Integer amount) {
         MemberCoin memberCoin = walletReader.readMemberCoinWithLock(memberId, coinId);
 
-        walletUpdater.increaseAmountOf(memberCoin, amount);
+        walletUpdater.increaseBalanceOf(memberCoin, amount);
     }
 
     @Transactional
@@ -31,7 +31,7 @@ public class MemberCoinService {
             throw new IllegalArgumentException("보유 수량이 부족합니다");
         }
 
-        walletUpdater.decreaseAmountOf(memberCoin, amount);
+        walletUpdater.decreaseBalanceOf(memberCoin, amount);
     }
 
     @Transactional

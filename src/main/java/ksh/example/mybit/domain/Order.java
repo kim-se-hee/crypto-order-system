@@ -17,7 +17,7 @@ public class Order {
     @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Integer amount;
+    private Integer volume;
     @Enumerated(EnumType.STRING)
     private OrderSide orderSide;
     @Enumerated(EnumType.STRING)
@@ -35,8 +35,8 @@ public class Order {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    public Order(Integer amount, OrderSide orderSide, OrderType orderType, BigDecimal limitPrice, Member member, Coin coin) {
-        this.amount = amount;
+    public Order(Integer volume, OrderSide orderSide, OrderType orderType, BigDecimal limitPrice, Member member, Coin coin) {
+        this.volume = volume;
         this.orderSide = orderSide;
         this.orderType = orderType;
         this.limitPrice = limitPrice;
@@ -49,12 +49,12 @@ public class Order {
 
     }
 
-    public void updateAmount(Integer volume) {
-        this.amount = this.amount - volume;
+    public void updateVolume(Integer volume) {
+        this.volume = this.volume - volume;
     }
 
     public boolean isFinished() {
-        return this.amount == 0;
+        return this.volume == 0;
     }
 
     public void finish() {

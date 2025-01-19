@@ -21,7 +21,7 @@ public class OrderMatcher {
 
         Integer tradeVolume = calculateTradeVolume(order, matchingOrder);
 
-        updateOrderAmount(order, matchingOrder, tradeVolume);
+        updateOrderVolume(order, matchingOrder, tradeVolume);
 
         BigDecimal executionPrice = decideExecutionPrice(order, matchingOrder);
 
@@ -37,9 +37,9 @@ public class OrderMatcher {
 
     }
 
-    private static void updateOrderAmount(Order order, Order matchingOrder, Integer tradeVolume) {
-        order.updateAmount(tradeVolume);
-        matchingOrder.updateAmount(tradeVolume);
+    private static void updateOrderVolume(Order order, Order matchingOrder, Integer tradeVolume) {
+        order.updateVolume(tradeVolume);
+        matchingOrder.updateVolume(tradeVolume);
 
         if (matchingOrder.isFinished()) {
             matchingOrder.finish();
@@ -51,9 +51,9 @@ public class OrderMatcher {
     }
 
     private Integer calculateTradeVolume(Order buyOrder, Order sellOrder) {
-        Integer buyAmount = buyOrder.getAmount();
-        Integer sellAmount = sellOrder.getAmount();
-        return Math.min(buyAmount, sellAmount);
+        Integer buyOrderVolume = buyOrder.getVolume();
+        Integer sellOrderVolume = sellOrder.getVolume();
+        return Math.min(buyOrderVolume, sellOrderVolume);
     }
 
     private BigDecimal decideExecutionPrice(Order order, Order matchingOrder) {

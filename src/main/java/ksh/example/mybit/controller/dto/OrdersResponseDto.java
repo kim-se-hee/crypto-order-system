@@ -28,15 +28,15 @@ public class OrdersResponseDto {
         Long id;
         OrderSide orderSide;
         String ticker;
-        Integer amount;
+        Integer volume;
         BigDecimal quantity;
 
         public OrderResponseDto(Order order) {
             this.id = order.getId();
             this.orderSide = order.getOrderSide();
             this.ticker = order.getCoin().getTicker();
-            this.amount = order.getAmount();
-            this.quantity = new BigDecimal(amount).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP);
+            this.volume = order.getVolume();
+            this.quantity = new BigDecimal(volume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP);
         }
     }
 }

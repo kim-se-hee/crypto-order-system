@@ -13,8 +13,10 @@ public class MemberCoin {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    //quantity
     private BigDecimal balance;
 
+    //balance
     private Long koreanWonValue;
 
     @ManyToOne(fetch = FetchType.LAZY)

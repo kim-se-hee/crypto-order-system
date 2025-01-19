@@ -37,7 +37,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .orderBy(
                         sortEntireOrderByLimitPrice(orderType),
                         order.createdAt.asc(),
-                        order.amount.desc()
+                        order.volume.desc()
                 )
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .fetchFirst();
@@ -62,7 +62,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .orderBy(
                         sortMatchableOrderByLimitPrice(o.getOrderSide()),
                         order.createdAt.asc(),
-                        order.amount.desc()
+                        order.volume.desc()
                 )
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .fetchFirst();
@@ -71,9 +71,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public Long sumPendingOrderAmount(OrderSide orderSide, Member member, Coin coin) {
+    public Long sumPendingOrderVolume(OrderSide orderSide, Member member, Coin coin) {
         Integer sum = queryFactory
-                .select(order.amount.sum())
+                .select(order.volume.sum())
                 .from(order)
                 .where(
                         order.member.eq(member),

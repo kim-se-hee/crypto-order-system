@@ -43,7 +43,7 @@ public class Validator {
 
         checkMarketSupports(order.getCoin());
 
-        checkAvailableOrderAmount(order);
+        checkOrderVolumeIsValid(order);
     }
 
     public void checkTimeIntervalFromLatestOrder(Order order) {
@@ -55,7 +55,7 @@ public class Validator {
                 });
     }
 
-    private void checkAvailableOrderAmount(Order order) {
+    private void checkOrderVolumeIsValid(Order order) {
         OrderSide orderSide = order.getOrderSide();
 
         if (orderSide == OrderSide.SELL) {
@@ -73,10 +73,10 @@ public class Validator {
         MemberCoin memberCoin = memberCoinRepository.findByMemberAndCoin(member, coin)
                 .orElseThrow(() -> new IllegalArgumentException("보유 수량보다 매도 수량이 많습니다."));
 
-        Long pendingAmount = orderRepository.sumPendingOrderAmount(OrderSide.SELL, member, coin);
-        long availableAmount = memberCoin.getKoreanWonValue() - pendingAmount;
+        Long pendingVolume = orderRepository.sumPendingOrderVolume(OrderSide.SELL, member, coin);
+        long availableAmount = memberCoin.getKoreanWonValue() - pendingVolume;
 
-        if (availableAmount < order.getAmount()) {
+        if (availableAmount < order.getVolume()) {
             throw new IllegalArgumentException("주문 가능한 수량이 부족합니다");
         }
     }
@@ -87,10 +87,10 @@ public class Validator {
         MemberCoin memberCoin = memberCoinRepository.findByMemberAndCoinTicker(member, "won")
                 .orElseThrow(() -> new IllegalArgumentException("원화가 부족합니다."));
 
-        Long pendingAmount = orderRepository.sumPendingOrderAmount(OrderSide.BUY, member, null);
+        Long pendingAmount = orderRepository.sumPendingOrderVolume(OrderSide.BUY, member, null);
         long availableAmount = memberCoin.getKoreanWonValue() - pendingAmount;
 
-        if (availableAmount < order.getAmount()) {
+        if (availableAmount < order.getVolume()) {
             throw new IllegalArgumentException("주문 가능한 금액이 부족합니다");
         }
     }

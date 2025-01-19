@@ -21,7 +21,7 @@ public class OrderForm {
 
     @NotNull
     @Range(min = 5000, max = 1000000000)
-    private Integer orderAmount;
+    private Integer orderVolume;
 
     @NotNull
     private OrderSide orderSide;

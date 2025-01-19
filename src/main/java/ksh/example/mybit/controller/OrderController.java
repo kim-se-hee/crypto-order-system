@@ -43,7 +43,7 @@ public class OrderController {
             Coin coin = coinService.findCoin(orderForm.getCoinId());
 
             Order order = new Order(
-                    orderForm.getOrderAmount(),
+                    orderForm.getOrderVolume(),
                     orderForm.getOrderSide(),
                     orderForm.getOrderType(),
                     orderForm.getLimitPrice(),

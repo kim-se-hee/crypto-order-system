@@ -16,6 +16,6 @@ public class DepositWithdrawForm {
     private Long coinId;
 
     @NotNull
-    private Integer amount;
+    private Integer volume;
 
 }
