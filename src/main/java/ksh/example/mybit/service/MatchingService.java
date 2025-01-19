@@ -28,7 +28,7 @@ public class MatchingService {
 
         walletUpdater.reflectMatchingResult(executedTrade);
 
-        coinUpdater.updatePrice(order.getCoin(), executedTrade.getExecutedPrice());
+        coinUpdater.updatePrice(executedTrade);
 
         return executedTrade;
     }

@@ -1,6 +1,7 @@
 package ksh.example.mybit.implementation;
 
 import ksh.example.mybit.domain.Coin;
+import ksh.example.mybit.domain.OrderType;
 import ksh.example.mybit.domain.Trade;
 import ksh.example.mybit.repository.CoinRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,9 @@ public class CoinUpdater {
 
     private final CoinRepository coinRepository;
 
-    public void updatePrice(Coin coin, BigDecimal price){
-        coin.updatePrice(price);
+    public void updatePrice(Trade trade){
+        Coin coin = trade.getSellOrder().getCoin();
+        coin.updatePrice(trade.getExecutedPrice());
     }
+
 }
