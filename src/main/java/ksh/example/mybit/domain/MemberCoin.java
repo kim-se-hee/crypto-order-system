@@ -13,11 +13,9 @@ public class MemberCoin {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    //quantity
-    private BigDecimal balance;
+    private BigDecimal quantity;
 
-    //balance
-    private Long koreanWonValue;
+    private Long balance;
 
     @ManyToOne(fetch = FetchType.LAZY)
     Member member;
@@ -25,9 +23,9 @@ public class MemberCoin {
     @ManyToOne(fetch = FetchType.LAZY)
     Coin coin;
 
-    public MemberCoin(BigDecimal balance, Long koreanWonValue, Member member, Coin coin) {
+    public MemberCoin(BigDecimal quantity, Long balance, Member member, Coin coin) {
+        this.quantity = quantity;
         this.balance = balance;
-        this.koreanWonValue = koreanWonValue;
         this.member = member;
         this.coin = coin;
     }
@@ -35,11 +33,11 @@ public class MemberCoin {
     public MemberCoin() {
     }
 
-    public void increaseKoreanWonValue(Integer amount) {
-        this.koreanWonValue += amount;
+    public void increaseBalance(Integer amount) {
+        this.balance += amount;
     }
 
-    public void decreaseKoreanWonValue(Integer amount) {
-        this.koreanWonValue -= amount;
+    public void decreaseBalance(Integer amount) {
+        this.balance -= amount;
     }
 }

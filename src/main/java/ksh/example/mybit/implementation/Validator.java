@@ -59,14 +59,14 @@ public class Validator {
         OrderSide orderSide = order.getOrderSide();
 
         if (orderSide == OrderSide.SELL) {
-            checkAvailableCoinAmount(order);
+            checkAvailableCoinBalance(order);
             return;
         }
 
-        checkAvailableKoreanWonAmount(order);
+        checkAvailableKoreanWonBalance(order);
     }
 
-    private void checkAvailableCoinAmount(Order order) {
+    private void checkAvailableCoinBalance(Order order) {
         Member member = order.getMember();
         Coin coin = order.getCoin();
 
@@ -74,23 +74,23 @@ public class Validator {
                 .orElseThrow(() -> new IllegalArgumentException("보유 수량보다 매도 수량이 많습니다."));
 
         Long pendingVolume = orderRepository.sumPendingOrderVolume(OrderSide.SELL, member, coin);
-        long availableAmount = memberCoin.getKoreanWonValue() - pendingVolume;
+        long availableBalance = memberCoin.getBalance() - pendingVolume;
 
-        if (availableAmount < order.getVolume()) {
+        if (availableBalance < order.getVolume()) {
             throw new IllegalArgumentException("주문 가능한 수량이 부족합니다");
         }
     }
 
-    private void checkAvailableKoreanWonAmount(Order order) {
+    private void checkAvailableKoreanWonBalance(Order order) {
         Member member = order.getMember();
 
         MemberCoin memberCoin = memberCoinRepository.findByMemberAndCoinTicker(member, "won")
                 .orElseThrow(() -> new IllegalArgumentException("원화가 부족합니다."));
 
-        Long pendingAmount = orderRepository.sumPendingOrderVolume(OrderSide.BUY, member, null);
-        long availableAmount = memberCoin.getKoreanWonValue() - pendingAmount;
+        Long pendingVolume = orderRepository.sumPendingOrderVolume(OrderSide.BUY, member, null);
+        long availableBalance = memberCoin.getBalance() - pendingVolume;
 
-        if (availableAmount < order.getVolume()) {
+        if (availableBalance < order.getVolume()) {
             throw new IllegalArgumentException("주문 가능한 금액이 부족합니다");
         }
     }

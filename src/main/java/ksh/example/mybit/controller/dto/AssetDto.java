@@ -16,7 +16,7 @@ public class AssetDto {
 
     public AssetDto(MemberCoin memberCoin) {
         this.ticker = memberCoin.getCoin().getTicker();
-        this.koreanValue = memberCoin.getKoreanWonValue();
+        this.koreanValue = memberCoin.getBalance();
         this.balance = new BigDecimal(koreanValue).divide(memberCoin.getCoin().getPrice(), 8, RoundingMode.HALF_UP);
     }
 }

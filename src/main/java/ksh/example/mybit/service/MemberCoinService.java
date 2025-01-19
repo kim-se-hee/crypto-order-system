@@ -27,7 +27,7 @@ public class MemberCoinService {
     public void withdraw(Long memberId, Long coinId, Integer amount) {
         MemberCoin memberCoin = walletReader.readMemberCoinWithLock(memberId, coinId);
 
-        if(memberCoin.getKoreanWonValue() < amount) {
+        if(memberCoin.getBalance() < amount) {
             throw new IllegalArgumentException("보유 수량이 부족합니다");
         }
 
