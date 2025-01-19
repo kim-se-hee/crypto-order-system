@@ -34,4 +34,8 @@ public class Coin {
 
     public Coin() {
     }
+
+    public void updatePrice(BigDecimal price) {
+        this.price = price;
+    }
 }

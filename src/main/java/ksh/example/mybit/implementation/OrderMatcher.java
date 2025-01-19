@@ -1,6 +1,7 @@
 package ksh.example.mybit.implementation;
 
 import ksh.example.mybit.domain.Order;
+import ksh.example.mybit.domain.OrderSide;
 import ksh.example.mybit.domain.Trade;
 import ksh.example.mybit.repository.TradeRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,11 @@ public class OrderMatcher {
 
         updateOrderAmount(order, matchingOrder, tradeVolume);
 
+        BigDecimal executionPrice = decideExecutionPrice(order, matchingOrder);
+
         Trade executedTrade = new Trade(
                 new BigDecimal(tradeVolume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP),
-                order.getCoin().getPrice(),
+                executionPrice,
                 tradeVolume,
                 order,
                 matchingOrder);
@@ -51,6 +54,14 @@ public class OrderMatcher {
         Integer buyAmount = buyOrder.getAmount();
         Integer sellAmount = sellOrder.getAmount();
         return Math.min(buyAmount, sellAmount);
+    }
+
+    private BigDecimal decideExecutionPrice(Order order, Order matchingOrder) {
+        if(order.getOrderSide() == OrderSide.SELL) {
+            return order.getLimitPrice();
+        }
+
+        return matchingOrder.getLimitPrice();
     }
 
 }
