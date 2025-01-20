@@ -1,10 +1,16 @@
 package ksh.example.mybit.implementation;
 
-import ksh.example.mybit.domain.*;
-import ksh.example.mybit.repository.CoinRepository;
-import ksh.example.mybit.repository.MemberCoinRepository;
-import ksh.example.mybit.repository.MemberRepository;
-import ksh.example.mybit.repository.OrderRepository;
+import ksh.example.mybit.coin.domain.Coin;
+import ksh.example.mybit.coin.repository.CoinRepository;
+import ksh.example.mybit.member.domain.Member;
+import ksh.example.mybit.member.repository.MemberRepository;
+import ksh.example.mybit.membercoin.domain.MemberCoin;
+import ksh.example.mybit.membercoin.repository.MemberCoinRepository;
+import ksh.example.mybit.order.domain.Order;
+import ksh.example.mybit.order.domain.OrderSide;
+import ksh.example.mybit.order.domain.OrderStatus;
+import ksh.example.mybit.order.implementation.OrderReader;
+import ksh.example.mybit.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -103,7 +109,7 @@ public class Validator {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
 
-        if(order.getOrderStatus() != OrderStatus.PENDING) {
+        if (order.getOrderStatus() != OrderStatus.PENDING) {
             throw new IllegalArgumentException("이미 종료된 주문입니다.");
         }
     }

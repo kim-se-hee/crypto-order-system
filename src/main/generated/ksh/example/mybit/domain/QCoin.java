@@ -1,4 +1,4 @@
-package ksh.example.mybit.domain;
+package ksh.example.mybit.domain2;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 

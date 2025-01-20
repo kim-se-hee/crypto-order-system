@@ -1,6 +1,6 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.util.LockManager;
+import ksh.example.mybit.global.util.LockManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

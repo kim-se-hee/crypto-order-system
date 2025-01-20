@@ -1,11 +1,11 @@
 package ksh.example.mybit.service;
 
-import ksh.example.mybit.domain.Order;
-import ksh.example.mybit.domain.Trade;
-import ksh.example.mybit.implementation.CoinUpdater;
-import ksh.example.mybit.implementation.OrderMatcher;
-import ksh.example.mybit.implementation.OrderReader;
-import ksh.example.mybit.implementation.WalletUpdater;
+import ksh.example.mybit.coin.implementaion.CoinUpdater;
+import ksh.example.mybit.membercoin.implementation.WalletUpdater;
+import ksh.example.mybit.order.domain.Order;
+import ksh.example.mybit.order.implementation.OrderMatcher;
+import ksh.example.mybit.order.implementation.OrderReader;
+import ksh.example.mybit.trade.domain.Trade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
