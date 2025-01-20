@@ -26,6 +26,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    private BigDecimal stopPrice;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 

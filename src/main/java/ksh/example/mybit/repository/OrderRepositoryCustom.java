@@ -18,4 +18,6 @@ public interface OrderRepositoryCustom {
     Optional<Order> findLatestOrder(Member member, Coin coin, OrderSide orderSide);
 
     List<Order> findPendingOrdersBy(Long memberId, Long coinId, Pageable pageable);
+
+    void updateOrderStatusOfTriggeredOrders();
 }

@@ -24,6 +24,8 @@ public class Coin {
 
     private BigDecimal closingPrice;
 
+    private BigDecimal previousPrice;
+
     public Coin(String name, String ticker, BigDecimal price, BigDecimal tick) {
         this.name = name;
         this.ticker = ticker;
@@ -36,6 +38,7 @@ public class Coin {
     }
 
     public void updatePrice(BigDecimal price) {
+        this.previousPrice = this.price;
         this.price = price;
     }
 }

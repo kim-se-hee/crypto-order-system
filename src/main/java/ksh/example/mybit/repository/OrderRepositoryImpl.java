@@ -120,6 +120,18 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public void updateOrderStatusOfTriggeredOrders() {
+        queryFactory
+                .update(order)
+                .set(order.orderType, OrderType.LIMIT)
+                .where(
+                        order.orderType.eq(OrderType.PRE),
+                        triggerCondition()
+                )
+                .execute();
+    }
+
     private BooleanExpression coinIdEquals(OrderType orderType, Long coinId) {
         if(orderType == OrderType.MARKET)
             return null;
@@ -159,4 +171,12 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         return order.limitPrice.asc();
     }
 
+
+    private static BooleanExpression triggerCondition() {
+        BooleanExpression upwardCondition = order.coin.price.goe(order.stopPrice).and(order.stopPrice.goe(order.coin.previousPrice));
+        BooleanExpression downwardCondition = order.coin.price.loe(order.stopPrice).and(order.stopPrice.loe(order.coin.previousPrice));
+
+        return upwardCondition.or(downwardCondition);
+    }
+    
 }

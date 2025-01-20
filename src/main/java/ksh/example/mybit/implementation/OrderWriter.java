@@ -19,4 +19,8 @@ public class OrderWriter {
         orderRepository.findById(orderId)
                 .ifPresent(Order::cancel);
     }
+
+    public void activateTriggeredOrders(){
+        orderRepository.updateOrderStatusOfTriggeredOrders();
+    }
 }
