@@ -24,7 +24,7 @@ public class OrderController {
     private final LockService lockService;
 
     @GetMapping("/order/open")
-    public OrderResponseListDto orderOpen(@Valid @ModelAttribute OpenOrderRequestDto orderRequestDto, Pageable pageable) {
+    public OrderResponseListDto orderOpen(@Valid @RequestBody OpenOrderRequestDto orderRequestDto, Pageable pageable) {
         List<Order> openOrders = orderService.getOpenOrders(orderRequestDto, pageable);
 
         return new OrderResponseListDto(openOrders);
