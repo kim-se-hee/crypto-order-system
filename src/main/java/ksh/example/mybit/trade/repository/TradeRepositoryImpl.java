@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-import static ksh.example.mybit.domain2.QTrade.trade;
+import static ksh.example.mybit.trade.domain.QTrade.*;
 
 public class TradeRepositoryImpl implements TradeRepositoryCustom {
 
