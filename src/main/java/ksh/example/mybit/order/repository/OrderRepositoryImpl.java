@@ -91,6 +91,24 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
+    public Long sumPendingOrderVolume(OrderSide orderSide, Long memberId, Long coinId) {
+        Integer sum = queryFactory
+                .select(order.volume.sum())
+                .from(order)
+                .where(
+                        order.member.id.eq(memberId),
+                        coinId == null ? null : order.coin.id.eq(coinId),
+                        order.orderSide.eq(orderSide),
+                        order.orderStatus.eq(OrderStatus.PENDING))
+                .fetchOne();
+
+        if (sum == null)
+            return 0L;
+
+        return sum.longValue();
+    }
+
+    @Override
     public Optional<Order> findLatestOrder(Member member, Coin coin, OrderSide orderSide) {
         Order latestOrder = queryFactory
                 .select(order)
@@ -98,6 +116,22 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .where(
                         order.member.eq(member),
                         order.coin.eq(coin),
+                        order.orderSide.eq(orderSide)
+                )
+                .orderBy(order.createdAt.asc())
+                .fetchFirst();
+
+        return Optional.ofNullable(latestOrder);
+    }
+
+    @Override
+    public Optional<Order> findLatestOrder(Long memberId, Long coinId, OrderSide orderSide) {
+        Order latestOrder = queryFactory
+                .select(order)
+                .from(order)
+                .where(
+                        order.member.id.eq(memberId),
+                        order.coin.id.eq(coinId),
                         order.orderSide.eq(orderSide)
                 )
                 .orderBy(order.createdAt.asc())

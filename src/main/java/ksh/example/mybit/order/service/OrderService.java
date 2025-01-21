@@ -1,9 +1,12 @@
 package ksh.example.mybit.order.service;
 
 import ksh.example.mybit.order.domain.Order;
+import ksh.example.mybit.order.dto.request.OpenOrderRequestDto;
+import ksh.example.mybit.order.dto.request.OrderCreateRequestDto;
+import ksh.example.mybit.order.dto.response.OrderCreateResponseDto;
 import ksh.example.mybit.order.implementation.OrderReader;
+import ksh.example.mybit.order.implementation.OrderValidator;
 import ksh.example.mybit.order.implementation.OrderWriter;
-import ksh.example.mybit.implementation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -16,30 +19,29 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderService {
-    private final Validator validator;
+    private final OrderValidator orderValidator;
     private final OrderReader orderReader;
     private final OrderWriter orderWriter;
 
+
     @Transactional
-    public Order placeOrder(Order order) {
-        validator.checkTimeIntervalFromLatestOrder(order);
+    public OrderCreateResponseDto placeOrder(OrderCreateRequestDto requestDto) {
+        orderValidator.checkTimeIntervalFromLatestOrder(requestDto.getMemberId(), requestDto.getCoinId(), requestDto.getOrderSide());
 
-        validator.checkOrderIsValid(order);
+        orderValidator.checkOrderVolumeIsValid(requestDto.getMemberId(), requestDto.getCoinId(), requestDto.getOrderVolume(), requestDto.getOrderSide());
 
-        orderWriter.save(order);
-        return order;
+        Order order = orderWriter.create(requestDto);
+        return new OrderCreateResponseDto(order.getId());
     }
 
     @Transactional
     public void cancelOrder(Long orderId) {
-        validator.checkOrderIsPending(orderId);
+        orderValidator.checkOrderIsPending(orderId);
 
         orderWriter.cancel(orderId);
     }
 
-    public List<Order> getOpenOrders(Long memberId, Long coinId, Pageable pageable) {
-        validator.checkMemberIsValid(memberId);
-
-        return orderReader.readPendingOrdersBy(memberId, coinId, pageable);
+    public List<Order> getOpenOrders(OpenOrderRequestDto requestDto, Pageable pageable) {
+        return orderReader.readPendingOrdersBy(requestDto.getMemberId(), requestDto.getCoinId(), pageable);
     }
 }

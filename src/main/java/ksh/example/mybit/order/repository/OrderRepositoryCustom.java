@@ -19,7 +19,11 @@ public interface OrderRepositoryCustom {
 
     Long sumPendingOrderVolume(OrderSide orderSide, Member member, Coin coin);
 
+    Long sumPendingOrderVolume(OrderSide orderSide, Long memberId, Long coinId);
+
     Optional<Order> findLatestOrder(Member member, Coin coin, OrderSide orderSide);
+
+    Optional<Order> findLatestOrder(Long memberId, Long coinId, OrderSide orderSide);
 
     List<Order> findPendingOrdersBy(Long memberId, Long coinId, Pageable pageable);
 
