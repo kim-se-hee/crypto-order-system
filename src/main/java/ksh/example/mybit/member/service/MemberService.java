@@ -1,8 +1,11 @@
 package ksh.example.mybit.member.service;
 
 import ksh.example.mybit.member.domain.Member;
+import ksh.example.mybit.member.dto.request.MemberJoinReqeustDto;
+import ksh.example.mybit.member.dto.response.MemberJoinResponseDto;
+import ksh.example.mybit.member.implementaion.MemberValidator;
+import ksh.example.mybit.member.implementaion.MemberWriter;
 import ksh.example.mybit.member.repository.MemberRepository;
-import ksh.example.mybit.implementation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +14,14 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final Validator validator;
+    private final MemberValidator memberValidator;
+    private final MemberWriter memberWriter;
 
-    public Member join(String email, String password, String name) {
-        validator.checkEmailIsAvailable(email);
+    public MemberJoinResponseDto join(MemberJoinReqeustDto reqeustDto) {
+        memberValidator.checkEmailIsNotDuplicated(reqeustDto.getEmail());
 
-        Member member = new Member(email, password, name);
-        memberRepository.save(member);
-        return member;
+        Member member = memberWriter.create(reqeustDto.getEmail(), reqeustDto.getPassword(), reqeustDto.getName());
+        return new MemberJoinResponseDto(member.getId());
     }
 
     public Member findMember(Long id) {

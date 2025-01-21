@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberJoinForm {
+public class MemberJoinReqeustDto {
 
     @NotBlank
     @Email
