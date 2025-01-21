@@ -1,7 +1,6 @@
 package ksh.example.mybit.order.controller;
 
 import jakarta.validation.Valid;
-import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.dto.request.OpenOrderRequestDto;
 import ksh.example.mybit.order.dto.request.OrderCreateRequestDto;
 import ksh.example.mybit.order.dto.response.OrderCreateResponseDto;
@@ -14,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 public class OrderController {
@@ -24,10 +21,12 @@ public class OrderController {
     private final LockService lockService;
 
     @GetMapping("/order/open")
-    public OrderResponseListDto orderOpen(@Valid @RequestBody OpenOrderRequestDto orderRequestDto, Pageable pageable) {
-        List<Order> openOrders = orderService.getOpenOrders(orderRequestDto, pageable);
+    public ResponseEntity<OrderResponseListDto> orderOpen(@Valid @RequestBody OpenOrderRequestDto orderRequestDto, Pageable pageable) {
+        OrderResponseListDto openOrders = orderService.getOpenOrders(orderRequestDto, pageable);
 
-        return new OrderResponseListDto(openOrders);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(openOrders);
     }
 
     @PostMapping("/order")

@@ -4,6 +4,7 @@ import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.dto.request.OpenOrderRequestDto;
 import ksh.example.mybit.order.dto.request.OrderCreateRequestDto;
 import ksh.example.mybit.order.dto.response.OrderCreateResponseDto;
+import ksh.example.mybit.order.dto.response.OrderResponseListDto;
 import ksh.example.mybit.order.implementation.OrderReader;
 import ksh.example.mybit.order.implementation.OrderValidator;
 import ksh.example.mybit.order.implementation.OrderWriter;
@@ -41,7 +42,9 @@ public class OrderService {
         orderWriter.cancel(orderId);
     }
 
-    public List<Order> getOpenOrders(OpenOrderRequestDto requestDto, Pageable pageable) {
-        return orderReader.readPendingOrdersBy(requestDto.getMemberId(), requestDto.getCoinId(), pageable);
+    public OrderResponseListDto getOpenOrders(OpenOrderRequestDto requestDto, Pageable pageable) {
+        List<Order> pendingOrders = orderReader.readPendingOrdersBy(requestDto.getMemberId(), requestDto.getCoinId(), pageable);
+
+        return new OrderResponseListDto(pendingOrders);
     }
 }

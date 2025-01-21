@@ -1,6 +1,7 @@
 package ksh.example.mybit.membercoin.service;
 
 import ksh.example.mybit.membercoin.domain.MemberCoin;
+import ksh.example.mybit.membercoin.dto.response.WalletAssetListResponseDto;
 import ksh.example.mybit.membercoin.implementation.WalletReader;
 import ksh.example.mybit.membercoin.implementation.WalletUpdater;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,9 @@ public class MemberCoinService {
     }
 
     @Transactional
-    public List<MemberCoin> findAllCoinsInWallet(Long id) {
-        return walletReader.readAllCoinOfMember(id);
+    public WalletAssetListResponseDto findAllCoinsInWallet(Long id) {
+        List<MemberCoin> memberCoins = walletReader.readAllCoinOfMember(id);
+
+        return new WalletAssetListResponseDto(memberCoins);
     }
 }

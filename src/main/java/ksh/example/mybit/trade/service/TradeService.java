@@ -1,6 +1,7 @@
 package ksh.example.mybit.trade.service;
 
 import ksh.example.mybit.trade.domain.Trade;
+import ksh.example.mybit.trade.dto.response.TradeHistoryListDto;
 import ksh.example.mybit.trade.implementation.TradeReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,9 @@ public class TradeService {
 
     private final TradeReader tradeReader;
 
-    public List<Trade> getTradeHistory(Long memberId, Long coinId, Pageable pageable) {
-        return tradeReader.readTradeBy(memberId, coinId, pageable);
+    public TradeHistoryListDto getTradeHistory(Long memberId, Long coinId, Pageable pageable) {
+        List<Trade> trades = tradeReader.readTradeBy(memberId, coinId, pageable);
+
+        return new TradeHistoryListDto(trades, memberId);
     }
 }
