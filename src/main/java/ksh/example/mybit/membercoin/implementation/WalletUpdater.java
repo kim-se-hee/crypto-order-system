@@ -23,12 +23,11 @@ public class WalletUpdater {
         MemberCoin purchasedCoin = memberCoinRepository
                 .findWithWriteLockByMemberAndCoin(order.getMember(), order.getCoin())
                 .orElseGet(() -> memberCoinRepository.save(
-                        new MemberCoin(
-                                null,
-                                trade.getExecutedVolume().longValue(),
-                                order.getMember(),
-                                order.getCoin()
-                        )
+                        MemberCoin.builder()
+                                .balance(trade.getExecutedVolume().longValue())
+                                .member(order.getMember())
+                                .coin(order.getCoin())
+                                .build()
                 ));
 
         purchasedCoin.increaseBalance(trade.getExecutedVolume());

@@ -1,8 +1,13 @@
 package ksh.example.mybit.member.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member {
     @Id
     @Column(name = "member_id")
@@ -14,12 +19,6 @@ public class Member {
     private String password;
 
     private String name;
-
-    public Member(String email, String password, String name) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-    }
 
     public Member() {
     }

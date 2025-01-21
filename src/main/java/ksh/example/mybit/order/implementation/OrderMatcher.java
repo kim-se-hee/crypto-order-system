@@ -26,12 +26,14 @@ public class OrderMatcher {
 
         BigDecimal executionPrice = decideExecutionPrice(order, matchingOrder);
 
-        Trade executedTrade = new Trade(
-                new BigDecimal(tradeVolume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP),
-                executionPrice,
-                tradeVolume,
-                order,
-                matchingOrder);
+        Trade executedTrade = Trade.builder()
+                .executedQuantity(new BigDecimal(tradeVolume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP))
+                .executedPrice(executionPrice)
+                .executedVolume(tradeVolume)
+                .buyOrder(order)
+                .sellOrder(matchingOrder)
+                .build();
+
         tradeRepository.save(executedTrade);
 
         return executedTrade;

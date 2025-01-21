@@ -22,14 +22,15 @@ public class OrderWriter {
         Member member = memberReader.readById(requestDto.getMemberId());
         Coin coin = coinReader.readById(requestDto.getCoinId());
 
-        Order order = new Order(
-                requestDto.getOrderVolume(),
-                requestDto.getOrderSide(),
-                requestDto.getOrderType(),
-                requestDto.getLimitPrice(),
-                member,
-                coin
-        );
+        Order order = Order.builder()
+                .volume(requestDto.getOrderVolume())
+                .orderSide(requestDto.getOrderSide())
+                .orderType(requestDto.getOrderType())
+                .limitPrice(requestDto.getLimitPrice())
+                .member(member)
+                .coin(coin)
+                .build();
+
         return orderRepository.save(order);
     }
 

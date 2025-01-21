@@ -3,6 +3,9 @@ package ksh.example.mybit.trade.domain;
 import jakarta.persistence.*;
 import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.domain.OrderSide;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +15,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
 public class Trade {
     @Id

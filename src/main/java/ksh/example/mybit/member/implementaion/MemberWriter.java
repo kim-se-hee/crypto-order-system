@@ -12,7 +12,12 @@ public class MemberWriter {
     private final MemberRepository memberRepository;
 
     public Member create(String email, String password, String name) {
-        Member member = new Member(email, password, name);
+        Member member = Member.builder()
+                .email(email)
+                .password(password)
+                .name(name)
+                .build();
+
         return memberRepository.save(member);
     }
 }
