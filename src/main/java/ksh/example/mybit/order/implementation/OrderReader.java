@@ -39,10 +39,6 @@ public class OrderReader {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    public Optional<Order> readLatestOrderBy(Member member, Coin coin, OrderSide orderSide) {
-        return orderRepository.findLatestOrder(member, coin, orderSide);
-    }
-
     public List<Order> readPendingOrdersBy(Long memberId, Long coinId, Pageable pageable) {
         return orderRepository.findPendingOrdersBy(memberId, coinId, pageable);
     }
