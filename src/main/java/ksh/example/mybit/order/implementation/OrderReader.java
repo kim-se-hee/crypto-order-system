@@ -1,10 +1,8 @@
 package ksh.example.mybit.order.implementation;
 
-import ksh.example.mybit.coin.domain.Coin;
+
 import ksh.example.mybit.coin.implementaion.CoinSelector;
-import ksh.example.mybit.member.domain.Member;
 import ksh.example.mybit.order.domain.Order;
-import ksh.example.mybit.order.domain.OrderSide;
 import ksh.example.mybit.order.domain.OrderType;
 import ksh.example.mybit.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
