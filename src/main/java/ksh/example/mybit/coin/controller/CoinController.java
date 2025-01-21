@@ -6,6 +6,8 @@ import ksh.example.mybit.coin.service.CoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,8 +18,11 @@ public class CoinController {
     private final CoinService coinService;
 
     @GetMapping("/coins")
-    public CoinListResponseDto marketList(Pageable pageable) {
+    public ResponseEntity<CoinListResponseDto> marketList(Pageable pageable) {
         Page<Coin> page = coinService.getListedCoins(pageable);
-        return new CoinListResponseDto(page);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new CoinListResponseDto(page));
     }
 }
