@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OpenOrderForm {
+public class OpenOrderRequestDto {
 
     @NotNull
     Long memberId;

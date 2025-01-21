@@ -11,11 +11,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrdersResponseDto {
+public class OrderResponseListDto {
 
     List<OrderResponseDto> orderResponses;
 
-    public OrdersResponseDto(List<Order> orders) {
+    public OrderResponseListDto(List<Order> orders) {
         this.orderResponses = orders.stream()
                 .map(OrderResponseDto::new)
                 .toList();

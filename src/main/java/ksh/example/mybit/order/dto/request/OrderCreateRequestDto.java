@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class OrderForm {
+public class OrderCreateRequestDto {
 
     @NotNull
     private Long memberId;
