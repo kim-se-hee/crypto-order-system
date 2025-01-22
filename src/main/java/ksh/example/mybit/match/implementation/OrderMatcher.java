@@ -1,4 +1,4 @@
-package ksh.example.mybit.order.implementation;
+package ksh.example.mybit.match.implementation;
 
 import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.domain.OrderSide;
