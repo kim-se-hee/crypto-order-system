@@ -23,7 +23,7 @@ public class WalletReader {
     }
 
     public MemberCoin readByMemberIdAndCoinId(Long memberId, Long coinId) {
-        memberCoinRepository.findWithWriteLockByMemberIdAndCoinId(memberId, coinId)
+        return memberCoinRepository.findWithWriteLockByMemberIdAndCoinId(memberId, coinId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 자산을 보유하고 있지 않습니다"));
     }
 }

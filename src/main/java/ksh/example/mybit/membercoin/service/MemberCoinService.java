@@ -1,13 +1,18 @@
 package ksh.example.mybit.membercoin.service;
 
+import jakarta.validation.Valid;
 import ksh.example.mybit.membercoin.domain.MemberCoin;
+import ksh.example.mybit.membercoin.dto.request.InvestmentStaticsRequestDto;
+import ksh.example.mybit.membercoin.dto.response.InvestmentStaticsResponseDto;
 import ksh.example.mybit.membercoin.dto.response.WalletAssetListResponseDto;
+import ksh.example.mybit.membercoin.implementation.PortfolioAnalyzer;
 import ksh.example.mybit.membercoin.implementation.WalletReader;
 import ksh.example.mybit.membercoin.implementation.WalletUpdater;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -16,6 +21,7 @@ public class MemberCoinService {
 
     private final WalletReader walletReader;
     private final WalletUpdater walletUpdater;
+    private final PortfolioAnalyzer portfolioAnalyzer;
 
     @Transactional
     public void deposit(Long memberId, Long coinId, Integer amount) {
@@ -40,5 +46,16 @@ public class MemberCoinService {
         List<MemberCoin> memberCoins = walletReader.readAllCoinOfMember(id);
 
         return new WalletAssetListResponseDto(memberCoins);
+    }
+
+    @Transactional
+    public InvestmentStaticsResponseDto getInvestmentStatic(@Valid InvestmentStaticsRequestDto requestDto) {
+        MemberCoin memberCoin = walletReader.readByMemberIdAndCoinId(requestDto.getMemberId(), requestDto.getCoinId());
+
+        BigDecimal averagePrice = portfolioAnalyzer.calculateAveragePrice(memberCoin);
+        BigDecimal totalValue = portfolioAnalyzer.calculateTotalValue(memberCoin);
+        BigDecimal ROI = portfolioAnalyzer.calculateROI(memberCoin, averagePrice);
+
+        return new InvestmentStaticsResponseDto(memberCoin, averagePrice, ROI);
     }
 }

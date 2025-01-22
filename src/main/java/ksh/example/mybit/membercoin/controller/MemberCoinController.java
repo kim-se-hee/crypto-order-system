@@ -2,6 +2,8 @@ package ksh.example.mybit.membercoin.controller;
 
 import jakarta.validation.Valid;
 import ksh.example.mybit.membercoin.dto.request.DepositWithdrawForm;
+import ksh.example.mybit.membercoin.dto.request.InvestmentStaticsRequestDto;
+import ksh.example.mybit.membercoin.dto.response.InvestmentStaticsResponseDto;
 import ksh.example.mybit.membercoin.dto.response.WalletAssetListResponseDto;
 import ksh.example.mybit.membercoin.service.MemberCoinService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,15 @@ public class MemberCoinController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(allCoinsInWallet);
+    }
+
+    @GetMapping("/static")
+    public ResponseEntity<InvestmentStaticsResponseDto> investmentStatics(@Valid @RequestBody InvestmentStaticsRequestDto requestDto) {
+        InvestmentStaticsResponseDto investmentStatic = memberCoinService.getInvestmentStatic(requestDto);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(investmentStatic);
     }
 
     @PostMapping("/deposit")
