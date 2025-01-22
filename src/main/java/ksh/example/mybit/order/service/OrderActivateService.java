@@ -1,4 +1,4 @@
-package ksh.example.mybit.service;
+package ksh.example.mybit.order.service;
 
 import ksh.example.mybit.order.implementation.OrderWriter;
 import lombok.RequiredArgsConstructor;

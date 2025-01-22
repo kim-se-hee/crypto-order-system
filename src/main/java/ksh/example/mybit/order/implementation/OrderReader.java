@@ -1,7 +1,7 @@
 package ksh.example.mybit.order.implementation;
 
 
-import ksh.example.mybit.coin.implementaion.CoinSelector;
+import ksh.example.mybit.global.util.CoinSelector;
 import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.domain.OrderType;
 import ksh.example.mybit.order.repository.OrderRepository;

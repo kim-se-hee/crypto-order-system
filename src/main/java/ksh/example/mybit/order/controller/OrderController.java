@@ -6,7 +6,7 @@ import ksh.example.mybit.order.dto.request.OrderCreateRequestDto;
 import ksh.example.mybit.order.dto.response.OrderCreateResponseDto;
 import ksh.example.mybit.order.dto.response.OrderResponseListDto;
 import ksh.example.mybit.order.service.OrderService;
-import ksh.example.mybit.service.LockService;
+import ksh.example.mybit.global.util.lock.LockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
