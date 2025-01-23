@@ -44,8 +44,8 @@ public class BigDecimalCalculateUtil {
         return calculate(BigDecimal::multiply, operand);
     }
 
-    public <T> BigDecimalCalculateUtil divide(T operand, int scale) {
-        return calculate((a, b) -> a.divide(b, scale, RoundingMode.HALF_UP), operand);
+    public <T> BigDecimalCalculateUtil divide(T operand, int scale, RoundingMode roundingMode) {
+        return calculate((a, b) -> a.divide(b, scale, roundingMode), operand);
     }
 
     public BigDecimal getValue() {

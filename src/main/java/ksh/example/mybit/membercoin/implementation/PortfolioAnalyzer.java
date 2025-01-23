@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Component
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ public class PortfolioAnalyzer {
 
         return BigDecimalCalculateUtil
                 .init(memberCoin.getBalance())
-                .divide(memberCoin.getQuantity(), 2)
+                .divide(memberCoin.getQuantity(), 2, RoundingMode.HALF_UP)
                 .getValue();
     }
 
@@ -31,7 +32,7 @@ public class PortfolioAnalyzer {
         return BigDecimalCalculateUtil
                 .init(memberCoin.getCoin().getPrice())
                 .subtract(averagePrice)
-                .divide(averagePrice, 2)
+                .divide(averagePrice, 2, RoundingMode.HALF_UP)
                 .multiply(100)
                 .getValue();
     }

@@ -1,5 +1,6 @@
 package ksh.example.mybit.match.implementation;
 
+import ksh.example.mybit.global.util.BigDecimalCalculateUtil;
 import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.domain.OrderSide;
 import ksh.example.mybit.order.domain.OrderType;
@@ -25,9 +26,10 @@ public class OrderMatcher {
         updateOrderVolume(order, matchingOrder, tradeVolume);
 
         BigDecimal executionPrice = decideExecutionPrice(order, matchingOrder);
+        BigDecimal executedQuantity = BigDecimalCalculateUtil.init(tradeVolume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP).getValue();
 
         Trade executedTrade = Trade.builder()
-                .executedQuantity(new BigDecimal(tradeVolume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP))
+                .executedQuantity(executedQuantity)
                 .executedPrice(executionPrice)
                 .executedVolume(tradeVolume)
                 .buyOrder(order)
