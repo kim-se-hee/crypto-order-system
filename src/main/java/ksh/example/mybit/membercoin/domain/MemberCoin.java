@@ -33,14 +33,6 @@ public class MemberCoin {
     public MemberCoin() {
     }
 
-    public void increaseBalance(Integer amount) {
-        this.balance += amount;
-    }
-
-    public void decreaseBalance(Integer amount) {
-        this.balance -= amount;
-    }
-
     public void increaseQuantity(BigDecimal quantity) {
         this.quantity = this.quantity.add(quantity);
     }

@@ -19,12 +19,12 @@ public class WalletUpdater {
         updateSellerWallet(trade);
     }
 
-    public void increaseBalanceOf(MemberCoin memberCoin, Integer balance) {
-        memberCoin.increaseBalance(balance);
+    public void increaseQuantityOf(MemberCoin memberCoin, BigDecimal quantity) {
+        memberCoin.increaseQuantity(quantity);
     }
 
-    public void decreaseBalanceOf(MemberCoin memberCoin, Integer balance) {
-        memberCoin.decreaseBalance(balance);
+    public void decreaseBalanceOf(MemberCoin memberCoin, BigDecimal quantity) {
+        memberCoin.decreaseQuantity(quantity);
     }
 
     private void updatePurchaserWallet(Trade trade) {

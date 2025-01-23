@@ -37,14 +37,14 @@ public class MemberCoinController {
 
     @PostMapping("/deposit")
     public ResponseEntity<Boolean> deposit(@Valid @ModelAttribute DepositWithdrawForm form) {
-        memberCoinService.deposit(form.getMemberId(), form.getCoinId(), form.getVolume());
+        memberCoinService.deposit(form.getMemberId(), form.getCoinId(), form.getQuantity());
 
         return ResponseEntity.ok(true);
     }
 
     @PostMapping("/withdraw")
     public ResponseEntity<Boolean> withdraw(@Valid @ModelAttribute DepositWithdrawForm form) {
-        memberCoinService.withdraw(form.getMemberId(), form.getCoinId(), form.getVolume());
+        memberCoinService.withdraw(form.getMemberId(), form.getCoinId(), form.getQuantity());
 
         return ResponseEntity.ok(true);
     }

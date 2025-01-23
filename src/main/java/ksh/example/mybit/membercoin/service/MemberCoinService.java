@@ -24,17 +24,17 @@ public class MemberCoinService {
     private final PortfolioAnalyzer portfolioAnalyzer;
 
     @Transactional
-    public void deposit(Long memberId, Long coinId, Integer amount) {
+    public void deposit(Long memberId, Long coinId, BigDecimal amount) {
         MemberCoin memberCoin = walletReader.readMemberCoinWithLock(memberId, coinId);
 
-        walletUpdater.increaseBalanceOf(memberCoin, amount);
+        walletUpdater.increaseQuantityOf(memberCoin, amount);
     }
 
     @Transactional
-    public void withdraw(Long memberId, Long coinId, Integer amount) {
+    public void withdraw(Long memberId, Long coinId, BigDecimal amount) {
         MemberCoin memberCoin = walletReader.readMemberCoinWithLock(memberId, coinId);
 
-        if (memberCoin.getBalance() < amount) {
+        if (memberCoin.getQuantity().compareTo(amount) < 0) {
             throw new IllegalArgumentException("보유 수량이 부족합니다");
         }
 
