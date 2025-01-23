@@ -24,6 +24,8 @@ public class MemberCoin {
 
     private Long balance;
 
+    private BigDecimal averagePrice;
+
     @ManyToOne(fetch = FetchType.LAZY)
     Member member;
 
