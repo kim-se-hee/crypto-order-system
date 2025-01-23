@@ -29,4 +29,27 @@ public class PortfolioAnalyzer {
                 .multiply(100)
                 .getValue();
     }
+
+    public BigDecimal calculateAveragePrice(MemberCoin memberCoin, BigDecimal executedPrice, BigDecimal executedQuantity) {
+        BigDecimal currentValue = BigDecimalCalculateUtil
+                .init(memberCoin.getAveragePrice())
+                .multiply(memberCoin.getQuantity())
+                .getValue();
+
+        BigDecimal newValue = BigDecimalCalculateUtil
+                .init(memberCoin.getCoin().getPrice())
+                .multiply(executedPrice)
+                .getValue();
+
+        BigDecimal totalQuantity = BigDecimalCalculateUtil
+                .init(memberCoin.getQuantity())
+                .add(executedQuantity)
+                .getValue();
+
+        return BigDecimalCalculateUtil
+                .init(currentValue)
+                .add(newValue)
+                .divide(totalQuantity, 4, RoundingMode.HALF_UP)
+                .getValue();
+    }
 }

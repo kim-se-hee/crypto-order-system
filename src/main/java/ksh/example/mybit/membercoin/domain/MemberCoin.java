@@ -42,4 +42,8 @@ public class MemberCoin {
     public void decreaseQuantity(BigDecimal quantity) {
         this.quantity = this.quantity.subtract(quantity);
     }
+
+    public void updateAveragePrice(BigDecimal averagePrice) {
+        this.averagePrice = averagePrice;
+    }
 }
