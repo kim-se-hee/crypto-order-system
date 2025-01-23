@@ -52,10 +52,9 @@ public class MemberCoinService {
     public InvestmentStaticsResponseDto getInvestmentStatic(@Valid InvestmentStaticsRequestDto requestDto) {
         MemberCoin memberCoin = walletReader.readByMemberIdAndCoinId(requestDto.getMemberId(), requestDto.getCoinId());
 
-        BigDecimal averagePrice = portfolioAnalyzer.calculateAveragePrice(memberCoin);
-        BigDecimal totalValue = portfolioAnalyzer.calculateTotalValue(memberCoin);
-        BigDecimal ROI = portfolioAnalyzer.calculateROI(memberCoin, averagePrice);
+        double balance = portfolioAnalyzer.calculateBalance(memberCoin);
+        BigDecimal ROI = portfolioAnalyzer.calculateROI(memberCoin);
 
-        return new InvestmentStaticsResponseDto(memberCoin, averagePrice, ROI);
+        return new InvestmentStaticsResponseDto(memberCoin, balance, ROI);
     }
 }

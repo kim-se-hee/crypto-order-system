@@ -12,27 +12,20 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class PortfolioAnalyzer {
 
-    public BigDecimal calculateAveragePrice(MemberCoin memberCoin) {
-
-        return BigDecimalCalculateUtil
-                .init(memberCoin.getBalance())
-                .divide(memberCoin.getQuantity(), 2, RoundingMode.HALF_UP)
-                .getValue();
-    }
-
-    public BigDecimal calculateTotalValue(MemberCoin memberCoin) {
+    public double calculateBalance(MemberCoin memberCoin) {
 
         return BigDecimalCalculateUtil
                 .init(memberCoin.getCoin().getPrice())
                 .multiply(memberCoin.getQuantity())
-                .getValue();
+                .getValue()
+                .doubleValue();
     }
 
-    public BigDecimal calculateROI(MemberCoin memberCoin, BigDecimal averagePrice) {
+    public BigDecimal calculateROI(MemberCoin memberCoin) {
         return BigDecimalCalculateUtil
                 .init(memberCoin.getCoin().getPrice())
-                .subtract(averagePrice)
-                .divide(averagePrice, 2, RoundingMode.HALF_UP)
+                .subtract(memberCoin.getAveragePrice())
+                .divide(memberCoin.getAveragePrice(), 2, RoundingMode.HALF_UP)
                 .multiply(100)
                 .getValue();
     }

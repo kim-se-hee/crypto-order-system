@@ -14,14 +14,14 @@ public class InvestmentStaticsResponseDto {
 
     private BigDecimal quantity;
 
-    private Long balance;
+    private double balance;
 
     private BigDecimal roi;
 
-    public InvestmentStaticsResponseDto(MemberCoin memberCoin, BigDecimal averagePrice, BigDecimal roi) {
-        this.averagePrice = averagePrice;
+    public InvestmentStaticsResponseDto(MemberCoin memberCoin, double balance, BigDecimal roi) {
+        this.averagePrice = memberCoin.getAveragePrice();
         this.quantity = memberCoin.getQuantity();
-        this.balance = memberCoin.getBalance();
+        this.balance = balance;
         this.roi = roi;
     }
 }
