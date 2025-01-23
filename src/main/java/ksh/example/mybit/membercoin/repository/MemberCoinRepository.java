@@ -26,6 +26,9 @@ public interface MemberCoinRepository extends JpaRepository<MemberCoin, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<MemberCoin> findWithWriteLockByMemberAndCoinTicker(Member member, String coinTicker);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<MemberCoin> findWithWriteLockByMemberIdAndCoinTicker(Long memberId, String coinTicker);
+
     List<MemberCoin> findByMemberId(Long memberId);
 
 }

@@ -58,7 +58,8 @@ public class OrderValidator {
         MemberCoin memberCoin = walletReader.readByMemberIdAndCoinId(memberId, coinId);
 
         Long pendingVolume = orderRepository.sumPendingOrderVolume(OrderSide.SELL, memberId, coinId);
-        long availableBalance = memberCoin.getBalance() - pendingVolume;
+        long coinBalance = memberCoin.getQuantity().multiply(memberCoin.getCoin().getPrice()).longValue();
+        long availableBalance = coinBalance - pendingVolume;
 
         if (availableBalance < volume) {
             throw new IllegalArgumentException("주문 가능한 수량이 부족합니다");
@@ -67,10 +68,10 @@ public class OrderValidator {
 
     private void checkAvailableKoreanWonBalance(Long memberId, Long coinId, Integer volume) {
 
-        MemberCoin memberCoin = walletReader.readByMemberIdAndCoinId(memberId, coinId);
+        MemberCoin koreanWon = walletReader.readByMemberIdAndTicker(memberId, "won");
 
         Long pendingVolume = orderRepository.sumPendingOrderVolume(OrderSide.BUY, memberId, null);
-        long availableBalance = memberCoin.getBalance() - pendingVolume;
+        long availableBalance = koreanWon.getQuantity().longValue() - pendingVolume;
 
         if (availableBalance < volume) {
             throw new IllegalArgumentException("주문 가능한 금액이 부족합니다");

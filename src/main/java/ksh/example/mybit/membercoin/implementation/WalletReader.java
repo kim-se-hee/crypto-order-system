@@ -26,4 +26,9 @@ public class WalletReader {
         return memberCoinRepository.findWithWriteLockByMemberIdAndCoinId(memberId, coinId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 자산을 보유하고 있지 않습니다"));
     }
+
+    public MemberCoin readByMemberIdAndTicker(Long memberId, String ticker) {
+        return memberCoinRepository.findWithWriteLockByMemberIdAndCoinTicker(memberId, ticker)
+                .orElseThrow(() -> new IllegalArgumentException("해당 자산을 보유하고 있지 않습니다"));
+    }
 }

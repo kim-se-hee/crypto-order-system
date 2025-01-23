@@ -35,7 +35,6 @@ public class WalletUpdater {
                 .orElseGet(() -> memberCoinRepository.save(
                         MemberCoin.builder()
                                 .quantity(BigDecimal.ZERO)
-                                .balance(trade.getExecutedVolume().longValue())
                                 .member(order.getMember())
                                 .coin(order.getCoin())
                                 .build()
