@@ -10,13 +10,15 @@ import java.math.RoundingMode;
 @Getter
 @Setter
 public class WalletAssetDto {
+    String name;
     String ticker;
     BigDecimal balance;
-    Long koreanValue;
+    BigDecimal quantity;
 
     public WalletAssetDto(MemberCoin memberCoin) {
+        this.name = memberCoin.getCoin().getName();
         this.ticker = memberCoin.getCoin().getTicker();
-        this.koreanValue = memberCoin.getBalance();
-        this.balance = new BigDecimal(koreanValue).divide(memberCoin.getCoin().getPrice(), 8, RoundingMode.HALF_UP);
+        this.balance = memberCoin.getCoin().getPrice().multiply(memberCoin.getQuantity());
+        this.quantity = memberCoin.getQuantity();
     }
 }
