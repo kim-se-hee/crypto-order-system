@@ -3,8 +3,10 @@ package ksh.example.mybit.order.service;
 import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.dto.request.OpenOrderRequestDto;
 import ksh.example.mybit.order.dto.request.OrderCreateRequestDto;
-import ksh.example.mybit.order.dto.response.OrderCreateResponseDto;
-import ksh.example.mybit.order.dto.response.OrderResponseListDto;
+import ksh.example.mybit.order.service.dto.request.OpenOrderServiceRequest;
+import ksh.example.mybit.order.service.dto.request.OrderCreateServiceRequest;
+import ksh.example.mybit.order.service.dto.response.OrderCreateResponse;
+import ksh.example.mybit.order.service.dto.response.OrderListResponse;
 import ksh.example.mybit.order.implementation.OrderReader;
 import ksh.example.mybit.order.implementation.OrderValidator;
 import ksh.example.mybit.order.implementation.OrderWriter;
@@ -26,13 +28,13 @@ public class OrderService {
 
 
     @Transactional
-    public OrderCreateResponseDto placeOrder(OrderCreateRequestDto requestDto) {
-        orderValidator.checkTimeIntervalFromLatestOrder(requestDto.getMemberId(), requestDto.getCoinId(), requestDto.getOrderSide());
+    public OrderCreateResponse placeOrder(OrderCreateServiceRequest request) {
+        orderValidator.checkTimeIntervalFromLatestOrder(request.getMemberId(), request.getCoinId(), request.getOrderSide());
 
-        orderValidator.checkOrderVolumeIsValid(requestDto.getMemberId(), requestDto.getCoinId(), requestDto.getOrderVolume(), requestDto.getOrderSide());
+        orderValidator.checkOrderVolumeIsValid(request.getMemberId(), request.getCoinId(), request.getOrderVolume(), request.getOrderSide());
 
-        Order order = orderWriter.create(requestDto);
-        return new OrderCreateResponseDto(order.getId());
+        Order order = orderWriter.create(request);
+        return new OrderCreateResponse(order.getId());
     }
 
     @Transactional
@@ -42,9 +44,9 @@ public class OrderService {
         orderWriter.cancel(orderId);
     }
 
-    public OrderResponseListDto getOpenOrders(OpenOrderRequestDto requestDto, Pageable pageable) {
-        List<Order> pendingOrders = orderReader.readPendingOrdersBy(requestDto.getMemberId(), requestDto.getCoinId(), pageable);
+    public OrderListResponse getOpenOrders(OpenOrderServiceRequest request, Pageable pageable) {
+        List<Order> pendingOrders = orderReader.readPendingOrdersBy(request.getMemberId(), request.getCoinId(), pageable);
 
-        return new OrderResponseListDto(pendingOrders);
+        return new OrderListResponse(pendingOrders);
     }
 }

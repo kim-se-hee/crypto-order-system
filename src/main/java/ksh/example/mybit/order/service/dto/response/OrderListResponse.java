@@ -1,4 +1,4 @@
-package ksh.example.mybit.order.dto.response;
+package ksh.example.mybit.order.service.dto.response;
 
 import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.domain.OrderSide;
@@ -11,11 +11,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrderResponseListDto {
+public class OrderListResponse {
 
     List<OrderResponseDto> orderResponses;
 
-    public OrderResponseListDto(List<Order> orders) {
+    public OrderListResponse(List<Order> orders) {
         this.orderResponses = orders.stream()
                 .map(OrderResponseDto::new)
                 .toList();

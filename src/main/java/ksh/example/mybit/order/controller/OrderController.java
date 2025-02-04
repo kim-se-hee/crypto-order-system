@@ -3,8 +3,8 @@ package ksh.example.mybit.order.controller;
 import jakarta.validation.Valid;
 import ksh.example.mybit.order.dto.request.OpenOrderRequestDto;
 import ksh.example.mybit.order.dto.request.OrderCreateRequestDto;
-import ksh.example.mybit.order.dto.response.OrderCreateResponseDto;
-import ksh.example.mybit.order.dto.response.OrderResponseListDto;
+import ksh.example.mybit.order.service.dto.response.OrderCreateResponse;
+import ksh.example.mybit.order.service.dto.response.OrderListResponse;
 import ksh.example.mybit.order.service.OrderService;
 import ksh.example.mybit.global.util.lock.LockService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class OrderController {
     private final LockService lockService;
 
     @GetMapping("/order/open")
-    public ResponseEntity<OrderResponseListDto> orderOpen(@Valid @RequestBody OpenOrderRequestDto orderRequestDto, Pageable pageable) {
-        OrderResponseListDto openOrders = orderService.getOpenOrders(orderRequestDto, pageable);
+    public ResponseEntity<OrderListResponse> orderOpen(@Valid @RequestBody OpenOrderRequestDto orderRequestDto, Pageable pageable) {
+        OrderListResponse openOrders = orderService.getOpenOrders(orderRequestDto.toServiceRequest(), pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -30,12 +30,12 @@ public class OrderController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<OrderCreateResponseDto> orderAdd(@Valid @RequestBody OrderCreateRequestDto requestDto) {
+    public ResponseEntity<OrderCreateResponse> orderAdd(@Valid @RequestBody OrderCreateRequestDto requestDto) {
         lockService.tryLock(requestDto.getMemberId());
 
-        OrderCreateResponseDto responseDto;
+        OrderCreateResponse responseDto;
         try {
-            responseDto = orderService.placeOrder(requestDto);
+            responseDto = orderService.placeOrder(requestDto.toServiceRequest());
         } finally {
             lockService.unLock(requestDto.getMemberId());
         }
