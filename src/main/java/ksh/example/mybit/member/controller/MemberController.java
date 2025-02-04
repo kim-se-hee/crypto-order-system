@@ -1,8 +1,8 @@
 package ksh.example.mybit.member.controller;
 
 import jakarta.validation.Valid;
-import ksh.example.mybit.member.dto.request.MemberJoinReqeustDto;
-import ksh.example.mybit.member.dto.response.MemberJoinResponseDto;
+import ksh.example.mybit.member.dto.request.MemberJoinReqeust;
+import ksh.example.mybit.member.service.dto.response.MemberJoinResponse;
 import ksh.example.mybit.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/member/new")
-    public ResponseEntity<MemberJoinResponseDto> memberAdd(@Valid @RequestBody MemberJoinReqeustDto reqeustDto) {
-        MemberJoinResponseDto responseDto = memberService.join(reqeustDto);
+    public ResponseEntity<MemberJoinResponse> memberAdd(@Valid @RequestBody MemberJoinReqeust reqeustDto) {
+        MemberJoinResponse responseDto = memberService.join(reqeustDto.toServiceRequest());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
