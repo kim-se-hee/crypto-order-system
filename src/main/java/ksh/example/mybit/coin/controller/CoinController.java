@@ -1,7 +1,7 @@
 package ksh.example.mybit.coin.controller;
 
 import ksh.example.mybit.coin.domain.Coin;
-import ksh.example.mybit.coin.dto.response.CoinListResponseDto;
+import ksh.example.mybit.coin.service.dto.response.CoinListResponse;
 import ksh.example.mybit.coin.service.CoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,11 +18,11 @@ public class CoinController {
     private final CoinService coinService;
 
     @GetMapping("/coins")
-    public ResponseEntity<CoinListResponseDto> marketList(Pageable pageable) {
+    public ResponseEntity<CoinListResponse> marketList(Pageable pageable) {
         Page<Coin> page = coinService.getListedCoins(pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new CoinListResponseDto(page));
+                .body(new CoinListResponse(page));
     }
 }

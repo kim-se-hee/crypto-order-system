@@ -1,4 +1,4 @@
-package ksh.example.mybit.coin.dto.response;
+package ksh.example.mybit.coin.service.dto.response;
 
 import ksh.example.mybit.coin.domain.Coin;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 
 @Getter
 @Setter
-public class CoinDto {
+public class CoinResponse {
 
     private Long id;
     private String name;
@@ -18,7 +18,7 @@ public class CoinDto {
     private BigDecimal tick;
     private BigDecimal changeRate;
 
-    public CoinDto(Coin coin) {
+    public CoinResponse(Coin coin) {
         this.id = coin.getId();
         this.name = coin.getName();
         this.ticker = coin.getTicker();

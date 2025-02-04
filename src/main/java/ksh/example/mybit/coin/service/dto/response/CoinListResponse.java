@@ -1,4 +1,4 @@
-package ksh.example.mybit.coin.dto.response;
+package ksh.example.mybit.coin.service.dto.response;
 
 import ksh.example.mybit.coin.domain.Coin;
 import lombok.Getter;
@@ -9,19 +9,19 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CoinListResponseDto {
+public class CoinListResponse {
 
     private Integer pageNum;
     private Integer totalPages;
     private boolean hasNext;
-    private List<CoinDto> coinList;
+    private List<CoinResponse> coinList;
 
-    public CoinListResponseDto(Page<Coin> page) {
+    public CoinListResponse(Page<Coin> page) {
         this.pageNum = page.getNumber();
         this.totalPages = page.getTotalPages();
         this.hasNext = page.hasNext();
         this.coinList = page.stream()
-                .map(CoinDto::new)
+                .map(CoinResponse::new)
                 .toList();
     }
 }
