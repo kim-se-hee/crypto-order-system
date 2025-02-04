@@ -33,7 +33,7 @@ public class OrderService {
 
         orderValidator.checkOrderVolumeIsValid(request.getMemberId(), request.getCoinId(), request.getOrderVolume(), request.getOrderSide());
 
-        Order order = orderWriter.create(request);
+        Order order = orderWriter.create(request.toEntity(), request.getMemberId(), request.getCoinId());
         return new OrderCreateResponse(order.getId());
     }
 

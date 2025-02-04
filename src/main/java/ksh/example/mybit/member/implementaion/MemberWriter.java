@@ -11,13 +11,8 @@ public class MemberWriter {
 
     private final MemberRepository memberRepository;
 
-    public Member create(String email, String password, String name) {
-        Member member = Member.builder()
-                .email(email)
-                .password(password)
-                .name(name)
-                .build();
-
+    public Member create(Member member) {
         return memberRepository.save(member);
     }
+
 }

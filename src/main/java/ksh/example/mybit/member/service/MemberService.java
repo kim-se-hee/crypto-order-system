@@ -20,7 +20,7 @@ public class MemberService {
     public MemberJoinResponse join(MemberJoinServiceRequest reqeustDto) {
         memberValidator.checkEmailIsNotDuplicated(reqeustDto.getEmail());
 
-        Member member = memberWriter.create(reqeustDto.getEmail(), reqeustDto.getPassword(), reqeustDto.getName());
+        Member member = memberWriter.create(reqeustDto.toEntity());
         return new MemberJoinResponse(member.getId());
     }
 

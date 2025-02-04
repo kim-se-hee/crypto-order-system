@@ -1,5 +1,6 @@
 package ksh.example.mybit.order.service.dto.request;
 
+import ksh.example.mybit.order.domain.Order;
 import ksh.example.mybit.order.domain.OrderSide;
 import ksh.example.mybit.order.domain.OrderType;
 import lombok.Builder;
@@ -27,5 +28,14 @@ public class OrderCreateServiceRequest {
         this.orderSide = orderSide;
         this.orderType = orderType;
         this.limitPrice = limitPrice;
+    }
+
+    public Order toEntity(){
+        return Order.builder()
+                .volume(orderVolume)
+                .orderSide(orderSide)
+                .orderType(orderType)
+                .limitPrice(limitPrice)
+                .build();
     }
 }

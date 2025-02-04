@@ -63,4 +63,9 @@ public class Order {
     public void cancel() {
         this.orderStatus = OrderStatus.CANCELED;
     }
+
+    public void setMemberAndCoin(Member member, Coin coin) {
+        this.member = member;
+        this.coin = coin;
+    }
 }
