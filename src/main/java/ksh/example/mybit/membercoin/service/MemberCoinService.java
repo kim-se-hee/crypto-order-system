@@ -2,9 +2,10 @@ package ksh.example.mybit.membercoin.service;
 
 import jakarta.validation.Valid;
 import ksh.example.mybit.membercoin.domain.MemberCoin;
-import ksh.example.mybit.membercoin.dto.request.InvestmentStaticsRequestDto;
-import ksh.example.mybit.membercoin.dto.response.InvestmentStaticsResponseDto;
-import ksh.example.mybit.membercoin.dto.response.WalletAssetListResponseDto;
+import ksh.example.mybit.membercoin.service.dto.request.FundTransferServiceRequest;
+import ksh.example.mybit.membercoin.service.dto.request.InvestmentStaticsServiceRequest;
+import ksh.example.mybit.membercoin.service.dto.response.InvestmentStaticsResponse;
+import ksh.example.mybit.membercoin.service.dto.response.WalletAssetListResponse;
 import ksh.example.mybit.membercoin.implementation.PortfolioAnalyzer;
 import ksh.example.mybit.membercoin.implementation.WalletReader;
 import ksh.example.mybit.membercoin.implementation.WalletUpdater;
@@ -24,37 +25,38 @@ public class MemberCoinService {
     private final PortfolioAnalyzer portfolioAnalyzer;
 
     @Transactional
-    public void deposit(Long memberId, Long coinId, BigDecimal amount) {
-        MemberCoin memberCoin = walletReader.readMemberCoinWithLock(memberId, coinId);
+    public void deposit(FundTransferServiceRequest request) {
+        MemberCoin memberCoin = walletReader.readMemberCoinWithLock(request.getMemberId(), request.getCoinId());
 
-        walletUpdater.increaseQuantityOf(memberCoin, amount);
+        walletUpdater.increaseQuantityOf(memberCoin, request.getQuantity());
     }
 
     @Transactional
-    public void withdraw(Long memberId, Long coinId, BigDecimal amount) {
-        MemberCoin memberCoin = walletReader.readMemberCoinWithLock(memberId, coinId);
+    public void withdraw(FundTransferServiceRequest request) {
+        MemberCoin memberCoin = walletReader.readMemberCoinWithLock(request.getMemberId(), request.getCoinId());
+        BigDecimal quantity = request.getQuantity();
 
-        if (memberCoin.getQuantity().compareTo(amount) < 0) {
+        if (memberCoin.getQuantity().compareTo(quantity) < 0) {
             throw new IllegalArgumentException("보유 수량이 부족합니다");
         }
 
-        walletUpdater.decreaseBalanceOf(memberCoin, amount);
+        walletUpdater.decreaseBalanceOf(memberCoin, quantity);
     }
 
     @Transactional
-    public WalletAssetListResponseDto findAllCoinsInWallet(Long id) {
+    public WalletAssetListResponse findAllCoinsInWallet(Long id) {
         List<MemberCoin> memberCoins = walletReader.readAllCoinOfMember(id);
 
-        return new WalletAssetListResponseDto(memberCoins);
+        return new WalletAssetListResponse(memberCoins);
     }
 
     @Transactional
-    public InvestmentStaticsResponseDto getInvestmentStatic(@Valid InvestmentStaticsRequestDto requestDto) {
+    public InvestmentStaticsResponse getInvestmentStatic(@Valid InvestmentStaticsServiceRequest requestDto) {
         MemberCoin memberCoin = walletReader.readByMemberIdAndCoinId(requestDto.getMemberId(), requestDto.getCoinId());
 
         double balance = portfolioAnalyzer.calculateBalance(memberCoin);
         BigDecimal ROI = portfolioAnalyzer.calculateROI(memberCoin);
 
-        return new InvestmentStaticsResponseDto(memberCoin, balance, ROI);
+        return new InvestmentStaticsResponse(memberCoin, balance, ROI);
     }
 }

@@ -1,4 +1,4 @@
-package ksh.example.mybit.membercoin.dto.response;
+package ksh.example.mybit.membercoin.service.dto.response;
 
 import ksh.example.mybit.membercoin.domain.MemberCoin;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class InvestmentStaticsResponseDto {
+public class InvestmentStaticsResponse {
 
     private BigDecimal averagePrice;
 
@@ -18,7 +18,7 @@ public class InvestmentStaticsResponseDto {
 
     private BigDecimal roi;
 
-    public InvestmentStaticsResponseDto(MemberCoin memberCoin, double balance, BigDecimal roi) {
+    public InvestmentStaticsResponse(MemberCoin memberCoin, double balance, BigDecimal roi) {
         this.averagePrice = memberCoin.getAveragePrice();
         this.quantity = memberCoin.getQuantity();
         this.balance = balance;

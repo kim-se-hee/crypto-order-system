@@ -1,21 +1,20 @@
-package ksh.example.mybit.membercoin.dto.response;
+package ksh.example.mybit.membercoin.service.dto.response;
 
 import ksh.example.mybit.membercoin.domain.MemberCoin;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @Getter
 @Setter
-public class WalletAssetDto {
+public class WalletAsset {
     String name;
     String ticker;
     BigDecimal balance;
     BigDecimal quantity;
 
-    public WalletAssetDto(MemberCoin memberCoin) {
+    public WalletAsset(MemberCoin memberCoin) {
         this.name = memberCoin.getCoin().getName();
         this.ticker = memberCoin.getCoin().getTicker();
         this.balance = memberCoin.getCoin().getPrice().multiply(memberCoin.getQuantity());

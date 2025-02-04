@@ -1,10 +1,10 @@
 package ksh.example.mybit.membercoin.controller;
 
 import jakarta.validation.Valid;
-import ksh.example.mybit.membercoin.dto.request.DepositWithdrawForm;
-import ksh.example.mybit.membercoin.dto.request.InvestmentStaticsRequestDto;
-import ksh.example.mybit.membercoin.dto.response.InvestmentStaticsResponseDto;
-import ksh.example.mybit.membercoin.dto.response.WalletAssetListResponseDto;
+import ksh.example.mybit.membercoin.dto.request.FundTransferRequest;
+import ksh.example.mybit.membercoin.dto.request.InvestmentStaticsRequest;
+import ksh.example.mybit.membercoin.service.dto.response.InvestmentStaticsResponse;
+import ksh.example.mybit.membercoin.service.dto.response.WalletAssetListResponse;
 import ksh.example.mybit.membercoin.service.MemberCoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,8 @@ public class MemberCoinController {
     private final MemberCoinService memberCoinService;
 
     @GetMapping("/wallet/{id}")
-    public ResponseEntity<WalletAssetListResponseDto> viewWallet(@PathVariable Long id) {
-        WalletAssetListResponseDto allCoinsInWallet = memberCoinService.findAllCoinsInWallet(id);
+    public ResponseEntity<WalletAssetListResponse> viewWallet(@PathVariable Long id) {
+        WalletAssetListResponse allCoinsInWallet = memberCoinService.findAllCoinsInWallet(id);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -27,8 +27,8 @@ public class MemberCoinController {
     }
 
     @GetMapping("/static")
-    public ResponseEntity<InvestmentStaticsResponseDto> investmentStatics(@Valid @RequestBody InvestmentStaticsRequestDto requestDto) {
-        InvestmentStaticsResponseDto investmentStatic = memberCoinService.getInvestmentStatic(requestDto);
+    public ResponseEntity<InvestmentStaticsResponse> investmentStatics(@Valid @RequestBody InvestmentStaticsRequest requestDto) {
+        InvestmentStaticsResponse investmentStatic = memberCoinService.getInvestmentStatic(requestDto.toServiceRequest());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -36,15 +36,15 @@ public class MemberCoinController {
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<Boolean> deposit(@Valid @ModelAttribute DepositWithdrawForm form) {
-        memberCoinService.deposit(form.getMemberId(), form.getCoinId(), form.getQuantity());
+    public ResponseEntity<Boolean> deposit(@Valid @ModelAttribute FundTransferRequest request) {
+        memberCoinService.deposit(request.toServiceRequest());
 
         return ResponseEntity.ok(true);
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<Boolean> withdraw(@Valid @ModelAttribute DepositWithdrawForm form) {
-        memberCoinService.withdraw(form.getMemberId(), form.getCoinId(), form.getQuantity());
+    public ResponseEntity<Boolean> withdraw(@Valid @ModelAttribute FundTransferRequest request) {
+        memberCoinService.withdraw(request.toServiceRequest());
 
         return ResponseEntity.ok(true);
     }
