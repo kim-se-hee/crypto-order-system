@@ -1,6 +1,6 @@
 package ksh.example.mybit.trade.controller;
 
-import ksh.example.mybit.trade.dto.response.TradeHistoryListDto;
+import ksh.example.mybit.trade.service.dto.response.TradeHistoryListResponse;
 import ksh.example.mybit.trade.service.TradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +17,8 @@ public class TradeController {
     private final TradeService tradeService;
 
     @GetMapping("trade/history")
-    public ResponseEntity<TradeHistoryListDto> tradeHistoryOfCoin(@RequestParam Long memberId, @RequestParam Long coinId, Pageable pageable) {
-        TradeHistoryListDto tradeHistoryList = tradeService.getTradeHistory(memberId, coinId, pageable);
+    public ResponseEntity<TradeHistoryListResponse> tradeHistoryOfCoin(@RequestParam Long memberId, @RequestParam Long coinId, Pageable pageable) {
+        TradeHistoryListResponse tradeHistoryList = tradeService.getTradeHistory(memberId, coinId, pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
