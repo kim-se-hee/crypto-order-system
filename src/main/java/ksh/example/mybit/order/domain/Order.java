@@ -49,6 +49,10 @@ public class Order {
     }
 
     public void updateVolume(Integer volume) {
+        if(volume > this.volume) {
+            throw new IllegalArgumentException("남아있는 주문 양이 부족합니다.");
+        }
+
         this.volume = this.volume - volume;
     }
 
