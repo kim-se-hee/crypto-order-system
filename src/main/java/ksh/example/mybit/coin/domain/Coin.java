@@ -1,6 +1,7 @@
 package ksh.example.mybit.coin.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -26,12 +27,14 @@ public class Coin {
 
     private BigDecimal previousPrice;
 
-    public Coin(String name, String ticker, BigDecimal price, BigDecimal tick) {
+    @Builder
+    private Coin(String name, String ticker, BigDecimal price, BigDecimal tick, BigDecimal closingPrice, BigDecimal previousPrice) {
         this.name = name;
         this.ticker = ticker;
         this.price = price;
         this.tick = tick;
-        this.closingPrice = price.multiply(BigDecimal.valueOf(new Random().nextDouble()));
+        this.closingPrice = closingPrice;
+        this.previousPrice = previousPrice;
     }
 
     public Coin() {
