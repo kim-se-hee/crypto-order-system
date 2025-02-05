@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberJoinReqeust {
+public class MemberJoinRequest {
 
     @NotBlank
     @Email

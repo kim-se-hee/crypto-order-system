@@ -1,7 +1,7 @@
 package ksh.example.mybit.member.controller;
 
 import jakarta.validation.Valid;
-import ksh.example.mybit.member.dto.request.MemberJoinReqeust;
+import ksh.example.mybit.member.dto.request.MemberJoinRequest;
 import ksh.example.mybit.member.service.dto.response.MemberJoinResponse;
 import ksh.example.mybit.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/member/new")
-    public ResponseEntity<MemberJoinResponse> memberAdd(@Valid @RequestBody MemberJoinReqeust reqeustDto) {
+    public ResponseEntity<MemberJoinResponse> memberAdd(@Valid @RequestBody MemberJoinRequest reqeustDto) {
         MemberJoinResponse responseDto = memberService.join(reqeustDto.toServiceRequest());
 
         return ResponseEntity
