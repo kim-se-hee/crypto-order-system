@@ -38,10 +38,17 @@ public class MemberCoin {
     }
 
     public void decreaseQuantity(BigDecimal quantity) {
+        if(this.quantity.compareTo(quantity) < 0) {
+            throw new IllegalArgumentException("차감할 보유 수량이 부족합니다.");
+        }
+
         this.quantity = this.quantity.subtract(quantity);
     }
 
     public void updateAveragePrice(BigDecimal averagePrice) {
+        if(BigDecimal.ZERO.compareTo(averagePrice) > 0) {
+            throw new IllegalArgumentException("평단가는 음수가 될 수 없습니다.");
+        }
         this.averagePrice = averagePrice;
     }
 }
