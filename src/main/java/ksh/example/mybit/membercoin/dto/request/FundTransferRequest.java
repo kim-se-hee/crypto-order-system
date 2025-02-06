@@ -24,6 +24,7 @@ public class FundTransferRequest {
         return FundTransferServiceRequest.builder()
                 .memberId(memberId)
                 .coinId(coinId)
+                .quantity(quantity)
                 .build();
     }
 
