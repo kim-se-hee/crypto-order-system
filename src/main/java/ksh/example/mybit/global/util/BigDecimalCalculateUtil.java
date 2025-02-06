@@ -5,27 +5,10 @@ import java.math.RoundingMode;
 
 public class BigDecimalCalculateUtil {
 
-    @FunctionalInterface
-    public interface BigDecimalOperator {
-        BigDecimal operate(BigDecimal a, BigDecimal b);
-    }
-
     private BigDecimal value;
 
-    public BigDecimalCalculateUtil(BigDecimal initialValue) {
+    private BigDecimalCalculateUtil(BigDecimal initialValue) {
         this.value = initialValue;
-    }
-
-    public static <T> BigDecimal toBigDecimal(T value) {
-        if (value == null) {
-            return BigDecimal.ZERO;
-        }
-
-        if (value instanceof BigDecimal) {
-            return (BigDecimal) value;
-        }
-
-        return new BigDecimal(value.toString());
     }
 
     public static <T> BigDecimalCalculateUtil init(T initialValue) {
@@ -48,8 +31,25 @@ public class BigDecimalCalculateUtil {
         return calculate((a, b) -> a.divide(b, scale, roundingMode), operand);
     }
 
+    public static <T> BigDecimal toBigDecimal(T value) {
+        if (value == null) {
+            return BigDecimal.ZERO;
+        }
+
+        if (value instanceof BigDecimal) {
+            return (BigDecimal) value;
+        }
+
+        return new BigDecimal(value.toString());
+    }
+
     public BigDecimal getValue() {
         return this.value;
+    }
+
+    @FunctionalInterface
+    private interface BigDecimalOperator {
+        BigDecimal operate(BigDecimal a, BigDecimal b);
     }
 
     private <T> BigDecimalCalculateUtil calculate(BigDecimalOperator operation, T operand) {
