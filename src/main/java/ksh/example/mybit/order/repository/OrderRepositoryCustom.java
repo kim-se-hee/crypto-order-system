@@ -13,7 +13,9 @@ import java.util.Optional;
 
 public interface OrderRepositoryCustom {
 
-    Optional<Order> findMostPriorOrderByOrderTypeAndCoinId(OrderType orderType, Long coinId);
+    Optional<Order> findMostPriorMarketOrderBy(Long coinId);
+
+    Optional<Order> findMostPriorLimitOrderBy(Long coinId);
 
     Optional<Order> findMatchingOrder(Order order);
 

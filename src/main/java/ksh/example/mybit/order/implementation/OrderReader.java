@@ -22,9 +22,9 @@ public class OrderReader {
         long coinId = coinSelector.getCurrentCoin();
 
         return orderRepository
-                .findMostPriorOrderByOrderTypeAndCoinId(OrderType.MARKET, coinId)
+                .findMostPriorMarketOrderBy(coinId)
                 .orElseGet(() -> orderRepository
-                        .findMostPriorOrderByOrderTypeAndCoinId(OrderType.LIMIT, coinId)
+                        .findMostPriorLimitOrderBy(coinId)
                         .orElseThrow(NoSuchElementException::new));
 
 

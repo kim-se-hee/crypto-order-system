@@ -26,18 +26,38 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public Optional<Order> findMostPriorOrderByOrderTypeAndCoinId(OrderType orderType, Long coinId) {
+    public Optional<Order> findMostPriorMarketOrderBy(Long coinId) {
         Order findOrder = queryFactory
                 .select(order)
                 .from(order)
                 .where(
                         order.orderStatus.eq(OrderStatus.PENDING),
-                        order.orderType.eq(orderType),
-                        orderSideEquals(orderType),
-                        coinIdEquals(orderType, coinId)
+                        order.orderType.eq(OrderType.MARKET),
+                        order.coin.id.eq(coinId)
                 )
                 .orderBy(
-                        sortEntireOrderByLimitPrice(orderType),
+                        order.createdAt.asc(),
+                        order.volume.desc()
+                )
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                .fetchFirst();
+
+        return Optional.ofNullable(findOrder);
+    }
+
+    @Override
+    public Optional<Order> findMostPriorLimitOrderBy(Long coinId) {
+        Order findOrder = queryFactory
+                .select(order)
+                .from(order)
+                .where(
+                        order.orderStatus.eq(OrderStatus.PENDING),
+                        order.orderType.eq(OrderType.LIMIT),
+                        order.orderSide.eq(OrderSide.BUY),
+                        order.coin.id.eq(coinId)
+                )
+                .orderBy(
+                        order.limitPrice.desc(),
                         order.createdAt.asc(),
                         order.volume.desc()
                 )
@@ -134,26 +154,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .execute();
     }
 
-    private BooleanExpression coinIdEquals(OrderType orderType, Long coinId) {
-        if (orderType == OrderType.MARKET)
-            return null;
-
-        return order.coin.id.eq(coinId);
-    }
-
-    private BooleanExpression orderSideEquals(OrderType orderType) {
-        if (orderType == OrderType.MARKET)
-            return null;
-
-        return order.orderSide.eq(OrderSide.BUY);
-    }
-
-    private OrderSpecifier<BigDecimal> sortEntireOrderByLimitPrice(OrderType orderType) {
-        if (orderType == OrderType.MARKET)
-            return new OrderSpecifier(null, NullExpression.DEFAULT, OrderSpecifier.NullHandling.Default);
-
-        return order.limitPrice.desc();
-    }
 
     private BooleanExpression matchablePriceRange(OrderSide orderSide, OrderType orderType, BigDecimal limitPrice) {
         if (orderType == OrderType.MARKET)
