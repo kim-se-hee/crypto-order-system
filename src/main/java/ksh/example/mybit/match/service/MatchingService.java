@@ -1,9 +1,9 @@
 package ksh.example.mybit.match.service;
 
 import ksh.example.mybit.coin.implementaion.CoinUpdater;
+import ksh.example.mybit.match.implementation.OrderMatcher;
 import ksh.example.mybit.membercoin.implementation.WalletUpdater;
 import ksh.example.mybit.order.domain.Order;
-import ksh.example.mybit.match.implementation.OrderMatcher;
 import ksh.example.mybit.order.implementation.OrderReader;
 import ksh.example.mybit.trade.domain.Trade;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class MatchingService {
 
         walletUpdater.reflectMatchingResult(executedTrade);
 
-        coinUpdater.updatePrice(executedTrade);
+        coinUpdater.updatePrice(order.getCoin(), executedTrade.getExecutedPrice());
 
         return executedTrade;
     }
