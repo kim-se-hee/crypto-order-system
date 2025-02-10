@@ -1,27 +1,29 @@
 package ksh.example.mybit.order.repository;
 
-import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
-import ksh.example.mybit.coin.domain.Coin;
-import ksh.example.mybit.member.domain.Member;
-import ksh.example.mybit.order.domain.*;
+import ksh.example.mybit.order.domain.Order;
+import ksh.example.mybit.order.domain.OrderSide;
+import ksh.example.mybit.order.domain.OrderStatus;
+import ksh.example.mybit.order.domain.OrderType;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static ksh.example.mybit.order.domain.QOrder.*;
+import static ksh.example.mybit.order.domain.QOrder.order;
 
 public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
 
     public OrderRepositoryImpl(EntityManager em) {
+        this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
 
@@ -152,6 +154,8 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         triggerCondition()
                 )
                 .execute();
+        em.flush();
+        em.clear();
     }
 
 
@@ -173,10 +177,10 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         return order.limitPrice.asc();
     }
 
-
     private static BooleanExpression triggerCondition() {
-        BooleanExpression upwardCondition = order.coin.price.goe(order.stopPrice).and(order.stopPrice.goe(order.coin.previousPrice));
-        BooleanExpression downwardCondition = order.coin.price.loe(order.stopPrice).and(order.stopPrice.loe(order.coin.previousPrice));
+
+        BooleanExpression upwardCondition = order.stopPrice.between(order.coin.price, order.coin.previousPrice);
+        BooleanExpression downwardCondition = order.stopPrice.between(order.coin.previousPrice, order.coin.price);
 
         return upwardCondition.or(downwardCondition);
     }
