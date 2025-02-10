@@ -23,8 +23,9 @@ public class TradeRepositoryImpl implements TradeRepositoryCustom {
                 .select(trade)
                 .from(trade)
                 .where(
-                        trade.buyOrder.member.id.eq(memberId).or(trade.sellOrder.member.id.eq(memberId)),
-                        trade.buyOrder.coin.id.eq(coinId)
+                        trade.buyOrder.member.id.eq(memberId).and(trade.buyOrder.coin.id.eq(coinId))
+                                .or(trade.sellOrder.member.id.eq(memberId).and(trade.sellOrder.coin.id.eq(coinId)))
+
                 )
                 .orderBy(trade.createdAt.asc())
                 .offset(pageable.getOffset())
