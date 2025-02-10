@@ -20,12 +20,14 @@ public class OrderMatcher {
 
 
     public Trade match(Order order, Order matchingOrder) {
+        Order buyOrder = decideBuyOrder(order, matchingOrder);
+        Order sellOrder = decideSellOrder(order, matchingOrder);
 
-        Integer tradeVolume = calculateTradeVolume(order, matchingOrder);
+        Integer tradeVolume = calculateTradeVolume(buyOrder, sellOrder);
 
-        updateOrderVolume(order, matchingOrder, tradeVolume);
+        updateOrderVolume(buyOrder, sellOrder, tradeVolume);
 
-        BigDecimal executionPrice = decideExecutionPrice(order, matchingOrder);
+        BigDecimal executionPrice = decideExecutionPrice(buyOrder, sellOrder);
         BigDecimal executedQuantity = BigDecimalCalculateUtil
                 .init(tradeVolume)
                 .divide(executionPrice, 8, RoundingMode.FLOOR)
@@ -35,14 +37,30 @@ public class OrderMatcher {
                 .executedQuantity(executedQuantity)
                 .executedPrice(executionPrice)
                 .executedVolume(tradeVolume)
-                .buyOrder(order)
-                .sellOrder(matchingOrder)
+                .buyOrder(buyOrder)
+                .sellOrder(sellOrder)
                 .build();
 
         tradeRepository.save(executedTrade);
 
         return executedTrade;
 
+    }
+
+    private static Order decideBuyOrder(Order order, Order matchingOrder) {
+        if(order.getOrderSide() == OrderSide.BUY) {
+            return order;
+        }
+
+        return matchingOrder;
+    }
+
+    private static Order decideSellOrder(Order order, Order matchingOrder) {
+        if(order.getOrderSide() == OrderSide.SELL) {
+            return order;
+        }
+
+        return matchingOrder;
     }
 
     private static void updateOrderVolume(Order order, Order matchingOrder, Integer tradeVolume) {
