@@ -26,7 +26,10 @@ public class OrderMatcher {
         updateOrderVolume(order, matchingOrder, tradeVolume);
 
         BigDecimal executionPrice = decideExecutionPrice(order, matchingOrder);
-        BigDecimal executedQuantity = BigDecimalCalculateUtil.init(tradeVolume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP).getValue();
+        BigDecimal executedQuantity = BigDecimalCalculateUtil
+                .init(tradeVolume)
+                .divide(executionPrice, 8, RoundingMode.FLOOR)
+                .getValue();
 
         Trade executedTrade = Trade.builder()
                 .executedQuantity(executedQuantity)
