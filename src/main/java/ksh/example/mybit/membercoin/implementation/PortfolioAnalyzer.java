@@ -39,8 +39,8 @@ public class PortfolioAnalyzer {
                 .getValue();
 
         BigDecimal newValue = BigDecimalCalculateUtil
-                .init(memberCoin.getCoin().getPrice())
-                .multiply(executedPrice)
+                .init(executedPrice)
+                .multiply(executedQuantity)
                 .getValue();
 
         BigDecimal totalQuantity = BigDecimalCalculateUtil
