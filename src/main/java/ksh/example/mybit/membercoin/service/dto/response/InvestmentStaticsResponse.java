@@ -16,9 +16,9 @@ public class InvestmentStaticsResponse {
 
     private double balance;
 
-    private BigDecimal roi;
+    private double roi;
 
-    public InvestmentStaticsResponse(MemberCoin memberCoin, double balance, BigDecimal roi) {
+    public InvestmentStaticsResponse(MemberCoin memberCoin, double balance, double roi) {
         this.averagePrice = memberCoin.getAveragePrice();
         this.quantity = memberCoin.getQuantity();
         this.balance = balance;

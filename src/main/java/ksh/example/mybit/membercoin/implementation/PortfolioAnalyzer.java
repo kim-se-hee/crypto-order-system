@@ -21,15 +21,16 @@ public class PortfolioAnalyzer {
                 .doubleValue();
     }
 
-    public BigDecimal calculateROI(MemberCoin memberCoin) {
+    public double calculateROI(MemberCoin memberCoin) {
         return BigDecimalCalculateUtil
                 .init(memberCoin.getCoin().getPrice())
                 .subtract(memberCoin.getAveragePrice())
                 .multiply(100)
                 .divide(memberCoin.getAveragePrice(), 2, RoundingMode.HALF_UP)
-                .getValue();
+                .getValue()
+                .doubleValue();
     }
-    
+
 
     public BigDecimal calculateAveragePrice(MemberCoin memberCoin, BigDecimal executedPrice, BigDecimal executedQuantity) {
         BigDecimal currentValue = BigDecimalCalculateUtil

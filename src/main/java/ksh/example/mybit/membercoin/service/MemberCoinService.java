@@ -50,12 +50,13 @@ public class MemberCoinService {
         return new WalletAssetListResponse(memberCoins);
     }
 
+
     @Transactional
     public InvestmentStaticsResponse getInvestmentStatic(@Valid InvestmentStaticsServiceRequest requestDto) {
         MemberCoin memberCoin = walletReader.readByMemberIdAndCoinId(requestDto.getMemberId(), requestDto.getCoinId());
 
         double balance = portfolioAnalyzer.calculateBalance(memberCoin);
-        BigDecimal ROI = portfolioAnalyzer.calculateROI(memberCoin);
+        double ROI = portfolioAnalyzer.calculateROI(memberCoin);
 
         return new InvestmentStaticsResponse(memberCoin, balance, ROI);
     }
