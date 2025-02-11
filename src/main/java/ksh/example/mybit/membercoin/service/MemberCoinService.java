@@ -2,13 +2,13 @@ package ksh.example.mybit.membercoin.service;
 
 import jakarta.validation.Valid;
 import ksh.example.mybit.membercoin.domain.MemberCoin;
+import ksh.example.mybit.membercoin.implementation.PortfolioAnalyzer;
+import ksh.example.mybit.membercoin.implementation.WalletReader;
+import ksh.example.mybit.membercoin.implementation.WalletUpdater;
 import ksh.example.mybit.membercoin.service.dto.request.FundTransferServiceRequest;
 import ksh.example.mybit.membercoin.service.dto.request.InvestmentStaticsServiceRequest;
 import ksh.example.mybit.membercoin.service.dto.response.InvestmentStaticsResponse;
 import ksh.example.mybit.membercoin.service.dto.response.WalletAssetListResponse;
-import ksh.example.mybit.membercoin.implementation.PortfolioAnalyzer;
-import ksh.example.mybit.membercoin.implementation.WalletReader;
-import ksh.example.mybit.membercoin.implementation.WalletUpdater;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,6 @@ public class MemberCoinService {
 
     private final WalletReader walletReader;
     private final WalletUpdater walletUpdater;
-    private final PortfolioAnalyzer portfolioAnalyzer;
 
     @Transactional
     public void deposit(FundTransferServiceRequest request) {
@@ -55,8 +54,8 @@ public class MemberCoinService {
     public InvestmentStaticsResponse getInvestmentStatic(@Valid InvestmentStaticsServiceRequest requestDto) {
         MemberCoin memberCoin = walletReader.readByMemberIdAndCoinId(requestDto.getMemberId(), requestDto.getCoinId());
 
-        double balance = portfolioAnalyzer.calculateBalance(memberCoin);
-        double ROI = portfolioAnalyzer.calculateROI(memberCoin);
+        double balance = PortfolioAnalyzer.calculateBalance(memberCoin);
+        double ROI = PortfolioAnalyzer.calculateROI(memberCoin);
 
         return new InvestmentStaticsResponse(memberCoin, balance, ROI);
     }

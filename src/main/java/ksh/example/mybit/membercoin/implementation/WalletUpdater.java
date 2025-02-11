@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class WalletUpdater {
     private final MemberCoinRepository memberCoinRepository;
-    private final PortfolioAnalyzer portfolioAnalyzer;
 
     public void reflectMatchingResult(Trade trade) {
         updatePurchaserWallet(trade);
@@ -41,7 +40,7 @@ public class WalletUpdater {
                                 .build()
                 ));
 
-        BigDecimal updatedAveragePrice = portfolioAnalyzer.calculateAveragePrice(purchasedCoin, trade.getExecutedPrice(), trade.getExecutedQuantity());
+        BigDecimal updatedAveragePrice = PortfolioAnalyzer.calculateAveragePrice(purchasedCoin, trade.getExecutedPrice(), trade.getExecutedQuantity());
         purchasedCoin.updateAveragePrice(updatedAveragePrice);
         purchasedCoin.increaseQuantity(trade.getExecutedQuantity());
 

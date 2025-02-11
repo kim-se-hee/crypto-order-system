@@ -12,7 +12,7 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class PortfolioAnalyzer {
 
-    public double calculateBalance(MemberCoin memberCoin) {
+    public static double calculateBalance(MemberCoin memberCoin) {
 
         return BigDecimalCalculateUtil
                 .init(memberCoin.getCoin().getPrice())
@@ -21,7 +21,7 @@ public class PortfolioAnalyzer {
                 .doubleValue();
     }
 
-    public double calculateROI(MemberCoin memberCoin) {
+    public static double calculateROI(MemberCoin memberCoin) {
         return BigDecimalCalculateUtil
                 .init(memberCoin.getCoin().getPrice())
                 .subtract(memberCoin.getAveragePrice())
@@ -32,7 +32,7 @@ public class PortfolioAnalyzer {
     }
 
 
-    public BigDecimal calculateAveragePrice(MemberCoin memberCoin, BigDecimal executedPrice, BigDecimal executedQuantity) {
+    public static BigDecimal calculateAveragePrice(MemberCoin memberCoin, BigDecimal executedPrice, BigDecimal executedQuantity) {
         BigDecimal currentValue = BigDecimalCalculateUtil
                 .init(memberCoin.getAveragePrice())
                 .multiply(memberCoin.getQuantity())
