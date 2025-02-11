@@ -11,7 +11,7 @@ public class MemberWriter {
 
     private final MemberRepository memberRepository;
 
-    public Member create(Member member) {
+    public Member join(Member member) {
         return memberRepository.save(member);
     }
 
