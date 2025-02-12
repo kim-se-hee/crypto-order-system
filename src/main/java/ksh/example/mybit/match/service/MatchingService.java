@@ -1,6 +1,7 @@
 package ksh.example.mybit.match.service;
 
 import ksh.example.mybit.coin.implementaion.CoinUpdater;
+import ksh.example.mybit.global.util.CoinSelector;
 import ksh.example.mybit.match.implementation.OrderMatcher;
 import ksh.example.mybit.membercoin.implementation.WalletUpdater;
 import ksh.example.mybit.order.domain.Order;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MatchingService {
 
+    private final CoinSelector coinSelector;
     private final OrderReader orderReader;
     private final OrderMatcher orderMatcher;
     private final WalletUpdater walletUpdater;
@@ -21,7 +23,9 @@ public class MatchingService {
 
     @Transactional
     public Trade matchOrder() {
-        Order order = orderReader.readMostPriorOrder();
+        long currentCoinId = coinSelector.getCurrentCoin();
+
+        Order order = orderReader.readMostPriorOrder(currentCoinId);
         Order matchingOrder = orderReader.readMatchingOrder(order);
 
         Trade executedTrade = orderMatcher.match(order, matchingOrder);

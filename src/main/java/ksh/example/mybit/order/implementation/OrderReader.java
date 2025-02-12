@@ -15,12 +15,9 @@ import java.util.NoSuchElementException;
 @Component
 @RequiredArgsConstructor
 public class OrderReader {
-    private final CoinSelector coinSelector;
     private final OrderRepository orderRepository;
 
-    public Order readMostPriorOrder() {
-        long coinId = coinSelector.getCurrentCoin();
-
+    public Order readMostPriorOrder(long coinId) {
         return orderRepository
                 .findMostPriorMarketOrderBy(coinId)
                 .orElseGet(() -> orderRepository
