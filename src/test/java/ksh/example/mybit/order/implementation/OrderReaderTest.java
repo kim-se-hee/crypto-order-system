@@ -212,6 +212,28 @@ class OrderReaderTest {
         assertThat(orders).isEmpty();
     }
 
+    @DisplayName("주어진 id로 주문을 조회한다")
+    @Test
+    void readById1(){
+        //given
+        Order order = new Order();
+        orderRepository.save(order);
+
+        //when
+        Order findOrder = orderReader.readById(order.getId());
+
+        //then
+        assertThat(findOrder).isEqualTo(order);
+     }
+
+    @DisplayName("주어진 id에 해당하는 주문이 없다면 예외가 발생한다")
+    @Test
+    void readById2(){
+        //when //then
+        assertThatThrownBy(() -> orderReader.readById(1L))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
     private static Order createMarketOrder(OrderSide orderSide, OrderStatus status, Member member, Coin coin) {
         return Order.builder()
                 .orderSide(orderSide)
