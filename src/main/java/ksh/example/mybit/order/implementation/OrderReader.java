@@ -36,4 +36,9 @@ public class OrderReader {
     public List<Order> readPendingOrdersBy(Long memberId, Long coinId, Pageable pageable) {
         return orderRepository.findPendingOrdersBy(memberId, coinId, pageable);
     }
+
+    public Order readById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
+    }
 }
