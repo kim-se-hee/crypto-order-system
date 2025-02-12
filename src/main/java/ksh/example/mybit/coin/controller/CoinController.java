@@ -19,10 +19,10 @@ public class CoinController {
 
     @GetMapping("/coins")
     public ResponseEntity<CoinListResponse> marketList(Pageable pageable) {
-        Page<Coin> page = coinService.getListedCoins(pageable);
+        CoinListResponse response = coinService.getListedCoins(pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new CoinListResponse(page));
+                .body(response);
     }
 }
