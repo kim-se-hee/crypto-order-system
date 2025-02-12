@@ -1,6 +1,7 @@
 package ksh.example.mybit.order.service;
 
 import ksh.example.mybit.order.domain.Order;
+import ksh.example.mybit.order.domain.OrderStatus;
 import ksh.example.mybit.order.dto.request.OpenOrderRequestDto;
 import ksh.example.mybit.order.dto.request.OrderCreateRequestDto;
 import ksh.example.mybit.order.service.dto.request.OpenOrderServiceRequest;
@@ -39,9 +40,8 @@ public class OrderService {
 
     @Transactional
     public void cancelOrder(Long orderId) {
-        orderValidator.checkOrderIsPending(orderId);
-
-        orderWriter.cancel(orderId);
+        Order targetOrder = orderReader.readById(orderId);
+        orderWriter.cancel(targetOrder);
     }
 
     public OrderListResponse getOpenOrders(OpenOrderServiceRequest request, Pageable pageable) {

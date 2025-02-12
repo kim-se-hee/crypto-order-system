@@ -5,6 +5,7 @@ import ksh.example.mybit.coin.implementaion.CoinReader;
 import ksh.example.mybit.member.domain.Member;
 import ksh.example.mybit.member.implementaion.MemberReader;
 import ksh.example.mybit.order.domain.Order;
+import ksh.example.mybit.order.domain.OrderStatus;
 import ksh.example.mybit.order.repository.OrderRepository;
 import ksh.example.mybit.order.service.dto.request.OrderCreateServiceRequest;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,9 @@ public class OrderWriter {
         return orderRepository.save(order);
     }
 
-    public void cancel(Long orderId) {
-        orderRepository.findById(orderId)
-                .ifPresent(Order::cancel);
+    public void cancel(Order order){
+        if(order.getOrderStatus() == OrderStatus.PENDING)
+            order.cancel();
     }
 
     public void activateTriggeredOrders() {

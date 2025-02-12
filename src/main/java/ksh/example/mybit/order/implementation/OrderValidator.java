@@ -30,15 +30,6 @@ public class OrderValidator {
                 });
     }
 
-    public void checkOrderIsPending(Long orderId){
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
-
-        if(order.getOrderStatus() != OrderStatus.PENDING) {
-            throw new IllegalArgumentException("이미 종료된 주문입니다.");
-        }
-    }
-
     public void checkOrderVolumeIsValid(Long memberId, Long coinId, Integer volume, OrderSide orderSide) {
 
         if (orderSide == OrderSide.SELL) {
