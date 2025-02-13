@@ -1,5 +1,6 @@
 package ksh.example.mybit.membercoin.domain;
 
+import ksh.example.mybit.coin.domain.Coin;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -90,5 +91,25 @@ class MemberCoinTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("평단가는 음수가 될 수 없습니다.");
     }
+
+    @DisplayName("자산의 원화 가치를 계산한다")
+    @Test
+    void getBalance(){
+        //given
+        Coin coin = Coin.builder()
+                .price(BigDecimal.valueOf(10000))
+                .build();
+
+        MemberCoin memberCoin = MemberCoin.builder()
+                .coin(coin)
+                .quantity(BigDecimal.valueOf(2))
+                .build();
+
+        //when
+        BigDecimal balance = memberCoin.getBalance();
+
+        //then
+        assertThat(balance).isEqualTo(BigDecimal.valueOf(20000));
+     }
 
 }
