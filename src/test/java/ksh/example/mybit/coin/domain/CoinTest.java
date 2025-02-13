@@ -2,6 +2,8 @@ package ksh.example.mybit.coin.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.math.BigDecimal;
 
@@ -26,11 +28,12 @@ class CoinTest {
     }
 
     @DisplayName("전일 대비 상승률을 계산한다")
-    @Test
-    void getChangeRate() {
+    @ParameterizedTest
+    @CsvSource({"12000, 20.00", "10000, 0.00", "8000, -20.00"})
+    void getChangeRate(int currentPrice, String result) {
         //given
         Coin coin = Coin.builder()
-                .price(BigDecimal.valueOf(12000))
+                .price(BigDecimal.valueOf(currentPrice))
                 .closingPrice(BigDecimal.valueOf(10000))
                 .build();
 
@@ -38,6 +41,6 @@ class CoinTest {
         BigDecimal changeRate = coin.getChangeRate();
 
         //then
-        assertThat(changeRate).isEqualTo(new BigDecimal("20.00"));
+        assertThat(changeRate).isEqualTo(new BigDecimal(result));
     }
 }
