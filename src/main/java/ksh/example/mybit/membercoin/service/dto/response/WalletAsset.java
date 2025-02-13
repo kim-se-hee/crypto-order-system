@@ -17,7 +17,7 @@ public class WalletAsset {
     public WalletAsset(MemberCoin memberCoin) {
         this.name = memberCoin.getCoin().getName();
         this.ticker = memberCoin.getCoin().getTicker();
-        this.balance = memberCoin.getCoin().getPrice().multiply(memberCoin.getQuantity());
+        this.balance = memberCoin.getBalance();
         this.quantity = memberCoin.getQuantity();
     }
 }

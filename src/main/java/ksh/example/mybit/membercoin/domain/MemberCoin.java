@@ -2,6 +2,7 @@ package ksh.example.mybit.membercoin.domain;
 
 import jakarta.persistence.*;
 import ksh.example.mybit.coin.domain.Coin;
+import ksh.example.mybit.global.util.BigDecimalCalculateUtil;
 import ksh.example.mybit.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,5 +51,11 @@ public class MemberCoin {
             throw new IllegalArgumentException("평단가는 음수가 될 수 없습니다.");
         }
         this.averagePrice = averagePrice;
+    }
+
+    public BigDecimal getBalance() {
+        return BigDecimalCalculateUtil.init(coin.getPrice())
+                .multiply(quantity)
+                .getValue();
     }
 }
