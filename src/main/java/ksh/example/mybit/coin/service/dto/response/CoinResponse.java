@@ -24,6 +24,6 @@ public class CoinResponse {
         this.ticker = coin.getTicker();
         this.price = coin.getPrice();
         this.tick = coin.getTick();
-        this.changeRate = coin.getClosingPrice().subtract(coin.getPrice()).divide(coin.getClosingPrice(), 2, RoundingMode.HALF_UP);
+        this.changeRate = coin.getChangeRate();
     }
 }
