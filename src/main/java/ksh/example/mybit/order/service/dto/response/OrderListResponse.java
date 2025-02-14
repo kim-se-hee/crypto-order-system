@@ -36,7 +36,7 @@ public class OrderListResponse {
             this.orderSide = order.getOrderSide();
             this.ticker = order.getCoin().getTicker();
             this.volume = order.getVolume();
-            this.quantity = new BigDecimal(volume).divide(order.getCoin().getPrice(), 8, RoundingMode.HALF_UP);
+            this.quantity = order.getQuantity();
         }
     }
 }

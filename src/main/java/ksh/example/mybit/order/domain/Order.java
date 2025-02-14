@@ -2,6 +2,7 @@ package ksh.example.mybit.order.domain;
 
 import jakarta.persistence.*;
 import ksh.example.mybit.coin.domain.Coin;
+import ksh.example.mybit.global.util.BigDecimalCalculateUtil;
 import ksh.example.mybit.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Entity
@@ -71,5 +73,11 @@ public class Order {
     public void setMemberAndCoin(Member member, Coin coin) {
         this.member = member;
         this.coin = coin;
+    }
+
+    public BigDecimal getQuantity() {
+        return BigDecimalCalculateUtil.init(volume)
+                .divide(coin.getPrice(), 8, RoundingMode.HALF_UP)
+                .getValue();
     }
 }
