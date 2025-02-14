@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -112,5 +114,25 @@ class OrderTest {
                 .contains(member, coin);
 
      }
+
+     @DisplayName("주문 요청한 코인 수량을 계산한다")
+     @Test
+     void getQuantity(){
+         //given
+         Coin coin = Coin.builder()
+                 .price(BigDecimal.valueOf(6))
+                 .build();
+
+         Order order = Order.builder()
+                 .coin(coin)
+                 .volume(10000)
+                 .build();
+
+         //when
+         BigDecimal quantity = order.getQuantity();
+
+         //then
+         assertThat(quantity).isEqualTo(BigDecimal.valueOf(1666.66666667));
+      }
 
 }
