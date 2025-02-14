@@ -47,4 +47,8 @@ public class Trade {
     public Trade() {
     }
 
+    public OrderSide getTradeOrderSideFor(Long memberId){
+        return sellOrder.getMember().getId() == memberId ? OrderSide.SELL : OrderSide.BUY;
+    }
+
 }

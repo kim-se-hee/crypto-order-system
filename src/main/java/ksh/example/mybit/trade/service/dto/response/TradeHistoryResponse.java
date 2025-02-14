@@ -19,7 +19,7 @@ public class TradeHistoryResponse {
     Integer executedVolume;
 
     public TradeHistoryResponse(Trade trade, Long memberId) {
-        this.orderSide = trade.getSellOrder().getMember().getId() == memberId ? OrderSide.SELL : OrderSide.BUY;
+        this.orderSide = trade.getTradeOrderSideFor(memberId);
         this.ticker = trade.getSellOrder().getCoin().getTicker();
         this.tradeDateTime = trade.getCreatedAt();
         this.executedQuantity = trade.getExecutedQuantity();
