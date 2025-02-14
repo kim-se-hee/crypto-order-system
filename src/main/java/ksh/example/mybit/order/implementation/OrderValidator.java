@@ -49,7 +49,7 @@ public class OrderValidator {
         MemberCoin memberCoin = walletReader.readByMemberIdAndCoinId(memberId, coinId);
 
         Long pendingVolume = orderRepository.sumPendingOrderVolume(OrderSide.SELL, memberId, coinId);
-        long coinBalance = memberCoin.getQuantity().multiply(memberCoin.getCoin().getPrice()).longValue();
+        long coinBalance = memberCoin.getBalance().longValue();
         long availableBalance = coinBalance - pendingVolume;
 
         if (availableBalance < volume) {
