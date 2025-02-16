@@ -18,7 +18,7 @@ public class MemberCoinController {
     private final MemberCoinService memberCoinService;
 
     @GetMapping("/wallet/{id}")
-    public ResponseEntity<WalletAssetListResponse> viewWallet(@PathVariable Long id) {
+    public ResponseEntity<WalletAssetListResponse> viewWallet(@PathVariable("id") Long id) {
         WalletAssetListResponse allCoinsInWallet = memberCoinService.findAllCoinsInWallet(id);
 
         return ResponseEntity
@@ -27,7 +27,7 @@ public class MemberCoinController {
     }
 
     @GetMapping("/static")
-    public ResponseEntity<InvestmentStaticsResponse> investmentStatics(@Valid @RequestBody InvestmentStaticsRequest requestDto) {
+    public ResponseEntity<InvestmentStaticsResponse> investmentStatics(@Valid @ModelAttribute InvestmentStaticsRequest requestDto) {
         InvestmentStaticsResponse investmentStatic = memberCoinService.getInvestmentStatic(requestDto.toServiceRequest());
 
         return ResponseEntity
@@ -36,14 +36,14 @@ public class MemberCoinController {
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<Boolean> deposit(@Valid @ModelAttribute FundTransferRequest request) {
+    public ResponseEntity<Boolean> deposit(@Valid @RequestBody FundTransferRequest request) {
         memberCoinService.deposit(request.toServiceRequest());
 
         return ResponseEntity.ok(true);
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<Boolean> withdraw(@Valid @ModelAttribute FundTransferRequest request) {
+    public ResponseEntity<Boolean> withdraw(@Valid @RequestBody FundTransferRequest request) {
         memberCoinService.withdraw(request.toServiceRequest());
 
         return ResponseEntity.ok(true);
